@@ -1,17 +1,17 @@
 ---
-title: "XML/JSON Analysis Template"
+title: "XML Analysis Template"
 output: 
   html_document:
-    number_section: true
+    css: css/custom.css
 ---
 
-## Parameters
+__Parameters__
 
 Use this chunk to set the parameters for a test run. `input.file` is the path to an input file in the above CSV format (using the OS-independent `file.path()` function.
 
 
 ```{r}
-input.file = file.path("..", "..", "data", "pdml_results.csv")
+input.file <- file.path("..", "..", "data", "dfxml_results.csv")
 ```
 
 
@@ -29,11 +29,13 @@ opts_chunk$set(fig.width=8, fig.height=4) # Quick adjustment for landscape figur
 options(warn = -1) # Prevent ggplot2 from dumping warnings to knitr output
 
 df <- read.csv(input.file)
+
 ```
 
 # Focus questions
+****
 
-## EXI Exploratory
+### EXI Exploratory
 
 How do the primary EXI ‘modes’ compare for schemaless encodings?
 
@@ -41,7 +43,8 @@ How do the primary EXI ‘modes’ compare for schemaless encodings?
 s <- c("xml.bitpacked_exi",
        "xml.precompress_exi",
        "xml.compress_exi")
-p <- filesize.vs.compaction(df=df, baseline="xml", series=s)
+p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
+p <- prettify.plot(p, legend.placement="top.right")
 print(p)
 ```
 
@@ -51,19 +54,20 @@ How do the primary EXI ‘modes’ compare for schema-informed encodings?
 s <- c("xml.schema_bitpacked_exi",
        "xml.schema_precompress_exi",
        "xml.schema_compress_exi")
-p <- filesize.vs.compaction(df=df, baseline="xml", series=s)
+p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
+p <- prettify.plot(p, legend.placement="bottom.left")
 print(p)
 ```
 
 Does the ‘strict’ option significantly improve compaction for schema-informed encodings?
 
 ```{r, echo=FALSE}
-s <- c("xml.schema_bitpacked_exi",
-       "xml.strict_bitpacked_exi",
-       "xml.schema_compress_exi",
-       "xml.strict_compress_exi")
-p <- filesize.vs.compaction(df=df, baseline="xml", series=s)
-print(p)
+# s <- c("xml.schema_bitpacked_exi",
+#        "xml.strict_bitpacked_exi",
+#        "xml.schema_compress_exi",
+#        "xml.strict_compress_exi")
+# p <- filesize.vs.compaction(df=df, baseline="xml", series=s)
+# print(p)
 ```
 
 Do any of the tested compression algorithms perform better on a schemaless, precompress EXI document than the standard DEFLATE?
@@ -72,7 +76,8 @@ Do any of the tested compression algorithms perform better on a schemaless, prec
 s <- c("xml.precompress_exi.zip",
        "xml.precompress_exi.gz",
        "xml.precompress_exi.bz2")
-p <- filesize.vs.compaction(df=df, baseline="xml.compress_exi", series=s)
+p <- filesize.vs.compaction(df=df, baseline="xml.compress_exi", series=s, x.range="log")
+p <- prettify.plot(p, legend.placement="bottom.right")
 print(p)
 ```
 
@@ -82,34 +87,29 @@ Do any of the tested compression algorithms perform better on a schema-informed,
 s <- c("xml.schema_precompress_exi.zip",
        "xml.schema_precompress_exi.gz",
        "xml.schema_precompress_exi.bz2")
-p <- filesize.vs.compaction(df=df, baseline="xml.schema_compress_exi", series=s)
+p <- filesize.vs.compaction(df=df, baseline="xml.schema_compress_exi", series=s, x.range="log")
+p <- prettify.plot(p, legend.placement="bottom.right")
 print(p)
 ```
 
 ## Binary-comparisons
 
-Which binary format is the smallest overall?
+Which binary format is the most compact?
 
 ```{r, echo=FALSE}
-s <- c("xml.strict_compress_exi",
-            "xml.strict_bitpacked_exi",
-            "xml.compress_exi",
-            "json.gz",
-            "json.cbor.gz",
-            "json.bson.gz")
-p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="auto")
-print(p)
+# s <- c("xml.strict_compress_exi",
+#             "xml.strict_bitpacked_exi",
+#             "xml.compress_exi")
+# p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="auto")
+# print(p)
 ```
 
 For a network already using gzip, do any of the binary formats offer improvements?
 
 ```{r, echo=FALSE}
-s <- c("xml.strict_compress_exi",
-            "xml.strict_bitpacked_exi",
-            "xml.compress_exi",
-            "json.gz",
-            "json.cbor.gz",
-            "json.bson.gz")
-p <- filesize.vs.compaction(df=df, baseline="xml.gz", series=s, x.range="auto")
-print(p)
+# s <- c("xml.strict_compress_exi",
+#             "xml.strict_bitpacked_exi",
+#             "xml.compress_exi")
+# p <- filesize.vs.compaction(df=df, baseline="xml.gz", series=s, x.range="auto")
+# print(p)
 ```

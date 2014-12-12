@@ -86,7 +86,7 @@ plot.as.percentage <- function(columns, set_ylim=FALSE, range=NULL){
 #                      using a continuous scale.
 #   5) y.range:  Settings for 
 
-filesize.vs.compaction <- function(df, baseline, series,  x.range="auto", y.range="full"){
+filesize.vs.compaction <- function(df, baseline, series,  x.range="auto"){
 
   # Cast data and evaluate sizes as percentage of specified encoding
   dfc <- dcast(df, file ~ variable)
@@ -108,12 +108,12 @@ filesize.vs.compaction <- function(df, baseline, series,  x.range="auto", y.rang
            shape = guide_legend("Encoding"),
            linetype= guide_legend("Encoding"))
   
+  # Adjust the y-scale
   p <- p + scale_y_continuous(ylabel, labels=percent_format())
-  
   p <- p + coord_cartesian(ylim=c(-0.05, max(dfcp$value)*1.05))
   if(max(dfcp$value) > 1){ p <- p + geom_hline(yintercept=1) }
   
-  # Adjust the x-scale as desired
+  # Adjust the x-scale
   if(length(x.range) == 2){
     p <- p + scale_x_continuous(xlabel, labels = comma, limits=range)
   } else if(x.range == "log") {
@@ -129,7 +129,7 @@ filesize.vs.compaction <- function(df, baseline, series,  x.range="auto", y.rang
 
 
 
-prettify.plot <- function(p, legend.placement){
+prettify.plot <- function(p, legend.placement="top.right"){
   # Make it look pretty
   font.size <- 7
   p <- p + scale_color_hue(l=50) +
