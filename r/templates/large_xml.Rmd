@@ -1,0 +1,115 @@
+---
+title: "XML/JSON Analysis Template"
+output: 
+  html_document:
+    number_section: true
+---
+
+## Parameters
+
+Use this chunk to set the parameters for a test run. `input.file` is the path to an input file in the above CSV format (using the OS-independent `file.path()` function.
+
+
+```{r}
+input.file = file.path("..", "..", "data", "pdml_results.csv")
+```
+
+
+```{r cache=FALSE, include=FALSE}
+library(knitr)
+library(ggplot2)
+library(reshape2)
+library(scales)
+library(plyr)
+library(grid)
+
+source("../utilities/util.R")
+
+opts_chunk$set(fig.width=8, fig.height=4) # Quick adjustment for landscape figures - only affects knitr output
+options(warn = -1) # Prevent ggplot2 from dumping warnings to knitr output
+
+df <- read.csv(input.file)
+```
+
+# Focus questions
+
+## EXI Exploratory
+
+How do the primary EXI ‘modes’ compare for schemaless encodings?
+
+```{r, echo=FALSE}
+s <- c("xml.bitpacked_exi",
+       "xml.precompress_exi",
+       "xml.compress_exi")
+p <- filesize.vs.compaction(df=df, baseline="xml", series=s)
+print(p)
+```
+
+How do the primary EXI ‘modes’ compare for schema-informed encodings?
+
+```{r, echo=FALSE}
+s <- c("xml.schema_bitpacked_exi",
+       "xml.schema_precompress_exi",
+       "xml.schema_compress_exi")
+p <- filesize.vs.compaction(df=df, baseline="xml", series=s)
+print(p)
+```
+
+Does the ‘strict’ option significantly improve compaction for schema-informed encodings?
+
+```{r, echo=FALSE}
+s <- c("xml.schema_bitpacked_exi",
+       "xml.strict_bitpacked_exi",
+       "xml.schema_compress_exi",
+       "xml.strict_compress_exi")
+p <- filesize.vs.compaction(df=df, baseline="xml", series=s)
+print(p)
+```
+
+Do any of the tested compression algorithms perform better on a schemaless, precompress EXI document than the standard DEFLATE?
+
+```{r, echo=FALSE}
+s <- c("xml.precompress_exi.zip",
+       "xml.precompress_exi.gz",
+       "xml.precompress_exi.bz2")
+p <- filesize.vs.compaction(df=df, baseline="xml.compress_exi", series=s)
+print(p)
+```
+
+Do any of the tested compression algorithms perform better on a schema-informed, precompress EXI document than the standard DEFLATE?
+
+```{r, echo=FALSE}
+s <- c("xml.schema_precompress_exi.zip",
+       "xml.schema_precompress_exi.gz",
+       "xml.schema_precompress_exi.bz2")
+p <- filesize.vs.compaction(df=df, baseline="xml.schema_compress_exi", series=s)
+print(p)
+```
+
+## Binary-comparisons
+
+Which binary format is the smallest overall?
+
+```{r, echo=FALSE}
+s <- c("xml.strict_compress_exi",
+            "xml.strict_bitpacked_exi",
+            "xml.compress_exi",
+            "json.gz",
+            "json.cbor.gz",
+            "json.bson.gz")
+p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="auto")
+print(p)
+```
+
+For a network already using gzip, do any of the binary formats offer improvements?
+
+```{r, echo=FALSE}
+s <- c("xml.strict_compress_exi",
+            "xml.strict_bitpacked_exi",
+            "xml.compress_exi",
+            "json.gz",
+            "json.cbor.gz",
+            "json.bson.gz")
+p <- filesize.vs.compaction(df=df, baseline="xml.gz", series=s, x.range="auto")
+print(p)
+```

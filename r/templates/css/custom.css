@@ -1,0 +1,37 @@
+body, td {
+   font-size: 18px;
+}
+
+body {
+  font-family: 'Palatino Linotype', Palatino, Georgia, serif;
+}
+
+tt, code, pre {
+  font-family: Monaco, 'Andale Mono', 'Lucida Console', Consolas, monospace;
+}
+
+h1 {
+   font-family: Optima, 'Tahoma', 'Helvetica Neue Light', sans-serif;
+   font-weight: 500;
+   padding-top: 40px;
+}
+
+h3 {
+  padding-top: 30px;
+}
+
+.node circle {
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.node {
+  font: 10px sans-serif;
+}
+
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1.5px;
+}
