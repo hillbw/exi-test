@@ -1,0 +1,2 @@
+java -jar target\TestGeneratorAisParser-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+java -cp target\TestGeneratorAisParser-0.0.1-SNAPSHOT-jar-with-dependencies.jar nl.esi.metis.testgenerator.TestGenerator

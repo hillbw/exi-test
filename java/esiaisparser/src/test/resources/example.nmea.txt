@@ -1,0 +1,2 @@
+The file example.nmea is based on actual AIS recordings.
+However, the recorded content has been manupilated for privacy reasons and test purposes.

@@ -1,0 +1,15 @@
+What is new in version 0.40
+    * Fixed error in inheritance relation + added associated test cases
+	* Fixed typo in annotation
+	
+What is new in version 0.30
+	* Improved toString() function of many messages.
+	* Fixed bug found by CWI in Message16 & Message16Unit
+	* Fixed bug found by randomized tests: differenceInBits returned value with wrong sign
+	
+What is new in version 0.25
+	* Increased robustness:
+			- Accept NMEA messages with 6 or more fill bits. Contribution from NexusZ.com
+			- Added multistep strategy for handling messages with incorrect length according to type.
+	* Bug fixed after review by YALTES.
+	* Increased consistency of annotations. Inconsistencies were found by automatic model-based testing.

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>nl.esi.metis</groupId>
+	<artifactId>EsiAisParser</artifactId>
+	<version>0.40-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>ESI Ais Parser</name>
+	<description>
+This package supports the parsing of AIS messages in Java. AIS, the Automatic Identification System, is a system aiming at improving maritime safety by exchanging messages between ships, other vehicles in particular aircraft involved in search-and-rescue (SAR), and (fixed) base stations. To be precise, this package support the ITU-R M.1371-4 AIS standard. 
+
+See our extensive javadoc and in particular the class AISParser for more information on how to use this package. 
+
+The parser was used in the Poseidon project, and is improved in the Metis project to better handle uncertain information. Both projects were led by the Embedded Systems Institute. In both projects Thales Nederlands was the carrying industrial partner, and multiple Dutch universities participated.
+	</description>
+	<url>http://sourceforge.net/projects/esiaisparser/</url>
+	<licenses>
+		<license>
+			<name>ESI AIS Parser license</name>
+			<url>https://sourceforge.net/p/esiaisparser/wiki/ESI AIS Parser License/</url>
+			<distribution>repo</distribution>
+			<comments>License by Brian C. Lane. If you have any questions about this license please email bcl@brianlane.com</comments>
+		</license>
+	</licenses>
+	<scm>
+		<url>https://sourceforge.net/p/esiaisparser/code/</url>
+		<connection>scm:svn://svn.code.sf.net/p/esiaisparser/code/</connection>
+	</scm>
+	<developers>
+		<developer>
+			<id>pierrevandelaar</id>
+			<name>Pierre van de Laar</name>
+			<email>pierre.van.de.laar AT esi.nl</email>
+		</developer>
+		<developer>
+			<id>pierreamerica</id>
+			<name>Pierre America</name>
+			<email>Pierre.America AT Philips.com</email>
+		</developer>
+	</developers>
+
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	
+	 <prerequisites>
+		<maven>2.2.1</maven>
+	</prerequisites>
+
+	<dependencies>
+		<dependency>
+			<groupId>colt</groupId>
+			<artifactId>colt</artifactId>
+			<version>1.2.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.9.5-rc1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.4.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>2.3.1</version>
+			</plugin>
+				<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.7</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.12</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.1.2</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.5</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.8.1</version>
+				<configuration>
+					<tags>
+						<tag>
+							<name>precondition</name>
+							<placement>cm</placement>
+							<head>Precondition:</head>
+						</tag>
+						<tag>
+							<name>postcondition</name>
+							<placement>cm</placement>
+							<head>Postcondition:</head>
+						</tag>
+					</tags>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+		<id>release-sign-artifacts</id>
+		<activation>
+			<property>
+			<name>performRelease</name>
+			<value>true</value>
+			</property>
+		</activation>
+		<build>
+			<plugins>
+				<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	</profile>
+  </profiles>
+</project>
