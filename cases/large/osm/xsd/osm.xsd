@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    version="0.6" >
+ 
+    <!-- XML Schema for Open Street Maps planet file / excerpts, suitable to be used with SSIS 2008 R2 -->
+    <xs:element name="osm" type="osm_root"></xs:element>
+ 
+    <!-- Simple Types. Note: osm.generator, bound.origin and bound.box are the only unspecialized strings left. -->
+    <!-- tags: I am defining arbitrary maximum lengths here to ease import into fixed-size database fields -->
+    <xs:simpleType name="osm_tagkey">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="250"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="osm_tagvalue">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="0"/>
+            <xs:maxLength value="3000"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <!-- User field in node/way/relation, arbitrary max length -->
+    <xs:simpleType name="osm_user">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="100"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <!-- Relation role: Again, arbitrary rules for role lengths -->
+    <xs:simpleType name="osm_role">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="0"/>
+            <xs:maxLength value="250"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <!-- Relation member type. Redundant Maxlength for SSIS metadata use -->
+    <xs:simpleType name="osm_membertype">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="8"/>
+            <xs:enumeration value="way" />
+            <xs:enumeration value="node" />
+            <xs:enumeration value="relation" />
+        </xs:restriction>
+    </xs:simpleType>
+ 
+    <!-- bound: stub. to be analyzed further. -->
+    <xs:complexType name="osm_bound">
+        <xs:attribute name="origin" type="xs:string" use="required" />
+        <xs:attribute name="box" type="xs:string" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="geofabrick_bounds">
+        <xs:attribute name="minlat" type="xs:double" use="required" />
+        <xs:attribute name="minlon" type="xs:double" use="required" />
+        <xs:attribute name="maxlat" type="xs:double" use="required" />
+        <xs:attribute name="maxlon" type="xs:double" use="required" />
+    </xs:complexType>
+ 
+    <!-- tags -->
+    <xs:complexType name="osm_tag">
+        <xs:attribute name="k" type="osm_tagkey" use="required" />
+        <xs:attribute name="v" type="osm_tagvalue" use="required" />
+    </xs:complexType>
+ 
+    <!-- nodes: Using int for the id explicitly allows negative numbers as hinted in some osm doc -->
+    <!-- Uniqueness of the node ids is not expressed here (xs:id unsuited, xs:unique seems ms-specific) -->
+    <!-- Using double instead of float for the coordinates again eases sql import (implying DT_R8 in SSIS) -->
+    <xs:complexType name="osm_node">
+        <xs:sequence>
+            <xs:element type="osm_tag" name="tag" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:long" use="required" />
+        <xs:attribute name="lat" type="xs:double" use="required" />
+        <xs:attribute name="lon" type="xs:double" use="required" />
+        <xs:attribute name="version" type="xs:int" use="optional" />
+        <xs:attribute name="changeset" type="xs:long" use="optional" />
+        <xs:attribute name="visible" type="xs:boolean" use="optional" />
+        <xs:attribute name="user" type="osm_user" use="optional" />
+        <xs:attribute name="uid" type="xs:long" use="optional" />
+        <xs:attribute name="timestamp" type="xs:dateTime" use="optional" />
+    </xs:complexType>
+ 
+    <!-- Ways -->
+    <xs:complexType name="osm_nd">
+        <xs:attribute name="ref" type="xs:long" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="osm_way">
+        <xs:sequence>
+            <!-- This allows ways with less than 2 nodes. I can think of no xsd method to express both arbitrary mixing of node refs and tags and a minimum node count that would be acceptable to SSIS. -->
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element type="osm_tag" name="tag" />
+                <xs:element type="osm_nd" name="nd" />
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:long" use="required" />
+        <xs:attribute name="version" type="xs:integer" use="optional" />
+        <xs:attribute name="changeset" type="xs:integer" use="optional" />
+        <xs:attribute name="uid" type="xs:integer" use="optional" />
+        <xs:attribute name="visible" type="xs:boolean" use="optional" />
+        <xs:attribute name="user" type="osm_user" use="optional" />
+        <xs:attribute name="timestamp" type="xs:dateTime" use="optional" />
+    </xs:complexType>
+ 
+    <!-- Relations: Again, arbitrary rules for role lengths and requiredness -->
+    <xs:complexType name="osm_member">
+        <xs:attribute name="type" type="osm_membertype" use="required"/>
+        <xs:attribute name="ref" type="xs:long" use="required" />
+        <xs:attribute name="role" type="osm_role" use="optional" />
+    </xs:complexType>
+    <xs:complexType name="osm_relation">
+        <xs:choice maxOccurs="unbounded">
+            <xs:element type="osm_tag" name="tag" />
+            <xs:element type="osm_member" name="member" />
+        </xs:choice>
+        <xs:attribute name="id" type="xs:long" use="required" />
+        <xs:attribute name="version" type="xs:integer" use="optional" />
+        <xs:attribute name="changeset" type="xs:integer" use="optional" />
+        <xs:attribute name="uid" type="xs:integer" use="optional" />
+        <xs:attribute name="visible" type="xs:boolean" use="optional" />
+        <xs:attribute name="user" type="osm_user" use="optional" />
+        <xs:attribute name="timestamp" type="xs:dateTime" use="optional" />
+    </xs:complexType>
+    <xs:complexType name="osm_root">
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="bounds" type="geofabrick_bounds" />
+            <xs:element minOccurs="0" maxOccurs="1" name="bound" type="osm_bound" />
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element type="osm_node" name="node" />
+                <xs:element type="osm_relation" name="relation" />
+                <xs:element type="osm_way" name="way" />
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="version" type="xs:decimal" use="required" />
+        <xs:attribute name="generator" type="xs:string" use="required" />
+        <xs:attribute name="timestamp" type="xs:dateTime" use="optional" />
+    </xs:complexType>
+</xs:schema>

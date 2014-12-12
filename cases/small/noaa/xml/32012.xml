@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><current_observation xsi:noNamespaceSchemaLocation="http://www.weather.gov/view/current_observation.xsd" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<credit>NOAA's National Weather Service</credit>
+	<credit_URL>http://weather.gov/</credit_URL>
+	<image>
+		<url>http://weather.gov/images/xml_logo.gif</url>
+		<title>NOAA's National Weather Service</title>
+		<link>http://weather.gov</link>
+	</image>
+	<suggested_pickup>15 minutes after the hour</suggested_pickup>
+	<suggested_pickup_period>60</suggested_pickup_period>
+	<location>Woods Hole Stratus Wave Station</location>
+	<station_id>32012</station_id>
+	<latitude>-19.616</latitude>
+	<longitude>-85.384</longitude>
+	<observation_time>Last Updated on Jul 29 2014, 8:50 pm CDT</observation_time>
+        <observation_time_rfc822>Tue, 29 Jul 2014 20:50:00 -0500</observation_time_rfc822>
+	<wave_height_m>1.8</wave_height_m>
+	<wave_height_ft>5.91</wave_height_ft>
+	<dominant_period_sec>11</dominant_period_sec>
+	<average_period_sec>6.4</average_period_sec>
+	<mean_wave_dir>South</mean_wave_dir>
+	<mean_wave_degrees>190</mean_wave_degrees>
+	<disclaimer_url>http://weather.gov/disclaimer.html</disclaimer_url>
+	<copyright_url>http://weather.gov/disclaimer.html</copyright_url>
+	<privacy_policy_url>http://weather.gov/notice.html</privacy_policy_url>
+</current_observation>
