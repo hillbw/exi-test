@@ -11,7 +11,9 @@ Use this chunk to set the parameters for a test run. `input.file` is the path to
 
 
 ```{r}
-input.file <- file.path("..", "..", "data", "dfxml_results.csv")
+use.case <- "osm"
+export.images <- TRUE
+
 ```
 
 
@@ -23,6 +25,7 @@ library(scales)
 library(plyr)
 library(grid)
 
+input.file <- file.path("..", "..", "data", paste0(use.case, "_results.csv"))
 source("../utilities/util.R")
 
 opts_chunk$set(fig.width=8, fig.height=4) # Quick adjustment for landscape figures - only affects knitr output
@@ -30,25 +33,29 @@ options(warn = -1) # Prevent ggplot2 from dumping warnings to knitr output
 
 df <- read.csv(input.file)
 
+counter <- 1 # controls what letter is assigned to a focus question, as well as the letter appended to plot export filenames
 ```
 
-# Focus questions
+# Focus Questions
 ****
 
 ### EXI Exploratory
 
-How do the primary EXI ‘modes’ compare for schemaless encodings?
+`r LETTERS[counter]`. How do the primary EXI modes compare for schemaless encodings?
 
 ```{r, echo=FALSE}
 s <- c("xml.bitpacked_exi",
        "xml.precompress_exi",
        "xml.compress_exi")
 p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
-p <- prettify.plot(p, legend.placement="top.right")
+p <- prettify.plot(p, legend.placement="bottom.left")
 print(p)
+
+if(export.images){ save.for.print(use.case, paste0("plot-",letters[counter])) }
+counter <- counter + 1
 ```
 
-How do the primary EXI ‘modes’ compare for schema-informed encodings?
+`r LETTERS[counter]`. How do the primary EXI ‘modes’ compare for schema-informed encodings?
 
 ```{r, echo=FALSE}
 s <- c("xml.schema_bitpacked_exi",
@@ -57,9 +64,12 @@ s <- c("xml.schema_bitpacked_exi",
 p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
 p <- prettify.plot(p, legend.placement="bottom.left")
 print(p)
+
+if(export.images){ save.for.print(use.case, paste0("plot-",letters[counter])) }
+counter <- counter + 1
 ```
 
-Does the ‘strict’ option significantly improve compaction for schema-informed encodings?
+`r LETTERS[counter]`. Does the ‘strict’ option significantly improve compaction for schema-informed encodings?
 
 ```{r, echo=FALSE}
 # s <- c("xml.schema_bitpacked_exi",
@@ -68,9 +78,12 @@ Does the ‘strict’ option significantly improve compaction for schema-informe
 #        "xml.strict_compress_exi")
 # p <- filesize.vs.compaction(df=df, baseline="xml", series=s)
 # print(p)
+
+# if(export.images){ save.for.print(use.case, paste0("plot-",letters[counter])) }
+counter <- counter + 1
 ```
 
-Do any of the tested compression algorithms perform better on a schemaless, precompress EXI document than the standard DEFLATE?
+`r LETTERS[counter]`. Do any of the tested compression algorithms perform better on a schemaless, precompress EXI document than the standard DEFLATE?
 
 ```{r, echo=FALSE}
 s <- c("xml.precompress_exi.zip",
@@ -79,9 +92,12 @@ s <- c("xml.precompress_exi.zip",
 p <- filesize.vs.compaction(df=df, baseline="xml.compress_exi", series=s, x.range="log")
 p <- prettify.plot(p, legend.placement="bottom.right")
 print(p)
+
+if(export.images){ save.for.print(use.case, paste0("plot-",letters[counter])) }
+counter <- counter + 1
 ```
 
-Do any of the tested compression algorithms perform better on a schema-informed, precompress EXI document than the standard DEFLATE?
+`r LETTERS[counter]`. Do any of the tested compression algorithms perform better on a schema-informed, precompress EXI document than the standard DEFLATE?
 
 ```{r, echo=FALSE}
 s <- c("xml.schema_precompress_exi.zip",
@@ -90,11 +106,14 @@ s <- c("xml.schema_precompress_exi.zip",
 p <- filesize.vs.compaction(df=df, baseline="xml.schema_compress_exi", series=s, x.range="log")
 p <- prettify.plot(p, legend.placement="bottom.right")
 print(p)
+
+if(export.images){ save.for.print(use.case, paste0("plot-",letters[counter])) }
+counter <- counter + 1
 ```
 
 ## Binary-comparisons
 
-Which binary format is the most compact?
+`r LETTERS[counter]`. Which EXI encoding is the most compact?
 
 ```{r, echo=FALSE}
 # s <- c("xml.strict_compress_exi",
@@ -102,9 +121,12 @@ Which binary format is the most compact?
 #             "xml.compress_exi")
 # p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="auto")
 # print(p)
+
+if(export.images){ save.for.print(use.case, paste0("plot-",letters[counter])) }
+counter <- counter + 1
 ```
 
-For a network already using gzip, do any of the binary formats offer improvements?
+`r LETTERS[counter]`. For a network already using gzip, do any of the binary formats offer improvements?
 
 ```{r, echo=FALSE}
 # s <- c("xml.strict_compress_exi",
@@ -112,4 +134,7 @@ For a network already using gzip, do any of the binary formats offer improvement
 #             "xml.compress_exi")
 # p <- filesize.vs.compaction(df=df, baseline="xml.gz", series=s, x.range="auto")
 # print(p)
+
+# if(export.images){ save.for.print(use.case, paste0("plot-",letters[counter])) }
+counter <- counter + 1
 ```

@@ -3,9 +3,11 @@
 #  -----------------------------------------------
 #  Parameters controlling input and output sources
 #  -----------------------------------------------
-sample_dir="../../../chopblock"  # flat directory containing XML/JSON files to be compressed
+
+# sample_dir="../../../chopblock"  # flat directory containing XML/JSON files to be compressed
+sample_dir="/Volumes/ExternalHDD/cases/big/osm/xml"
 working_dir="./temp/"   # a temp directory for working on files - needs trailing '/'
-output_file="../data/gpx_results.csv"   # file results will be stored in
+output_file="../data/gpx_results.csv"   # where to write the test results?
 
 
 #  --------------------------------------------------
@@ -47,17 +49,17 @@ do
             schema="" # Null out schema to prevent confusion in possible mixed content runs
             ;;
         .dfxml)
-            schema="../cases/big/dfxml/xsd/dfxml.xsd"
+            schema="../cases/large/dfxml/xsd/dfxml.xsd"
             ./process_xml.sh ${working_dir} ${filename} ${extension} ${output_file} ${schema}
             schema="" # Null out schema to prevent confusion in possible mixed content runs
             ;;
         .pdml)
-            schema="../cases/big/pdml/xsd/pdml.xsd"
+            schema="../cases/large/pdml/xsd/pdml.xsd"
             ./process_xml.sh ${working_dir} ${filename} ${extension} ${output_file} ${schema}
             schema="" # Null out schema to prevent confusion in possible mixed content runs
             ;;
         .osm)
-            schema="../cases/big/osm/xsd/osm.xsd"
+            schema="../cases/large/osm/xsd/osm.xsd"
             ./process_xml.sh ${working_dir} ${filename} ${extension} ${output_file} ${schema}
             schema="" # Null out schema to prevent confusion in possible mixed content runs
             ;;

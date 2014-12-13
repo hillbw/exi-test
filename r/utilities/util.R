@@ -161,6 +161,9 @@ get.range.of.fnames <- function(lower, upper, encoding, df){
   return(fnames)
 }
 
-save.thesis.plot <- function(file.name){
-  ggsave(file=paste("../../img/plots/",file.name,".pdf"), width=6, height=3.25, units="in")  
+# ------------------------------------------------------------------------------------
+# Export a ggplot in PDF format that fits nicely on US Letter paper with 1.25" margins
+# ------------------------------------------------------------------------------------
+save.for.print <- function(use.case, file.name){
+  ggsave(file=paste0("../plots/", use.case,"-", file.name,".pdf"), width=6, height=3.25, units="in")  
 }
