@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+  .node circle {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+  }
+
+  .node {
+    font: 12px "Arial Narrow";
+  }
+
+  .link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1.5px;
+  }
+
+  body {
+    width: 750px;
+    margin: auto;
+    font-family: Georgia, serif;
+  }
+
+  h1 {
+    font-family: Optima, sans-serif;
+    font-weight: 100;
+  }
+  h3 {
+    font-family: Georgia, serif;
+  }
+  hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+  }
+
+</style>
+<body>
+<h1>Encoding Breakdown for Small Datasets</h1>
+<hr />
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+  var width = 750,
+      height = 750,
+      id = "encodings";
+
+  var cluster = d3.layout.cluster()
+      .size([height, width-250]); //Subtracted integer appears to constrain right side of the tree 
+
+  var diagonal = d3.svg.diagonal()
+      .projection(function(d) { return [d.y, d.x]; });
+
+  var svg = d3.select("body").append("svg")
+      .attr("id", id)
+      .attr("width", width)
+      .attr("height", height)
+      .append("g")
+      .attr("transform", "translate(80,0)"); //and the x translate appears to adjust the left
+
+  d3.json("json/small_encodings.json", function(error, root) {
+    var nodes = cluster.nodes(root),
+        links = cluster.links(nodes);
+
+    var link = svg.selectAll(".link")
+        .data(links)
+        .enter().append("path")
+        .attr("class", "link")
+        .attr("d", diagonal);
+
+    var node = svg.selectAll(".node")
+        .data(nodes)
+        .enter().append("g")
+        .attr("class", "node")
+        .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
+
+    node.append("circle")
+        .attr("r", 4.5);
+
+    node.append("text")
+        .attr("dx", function(d) { return d.children ? -8 : 8; })
+        .attr("dy", 3)
+        .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
+        .text(function(d) { return d.name; });
+  });
+
+  d3.select(self.frameElement).style("height", height + "px");
+
+</script>
+</body>

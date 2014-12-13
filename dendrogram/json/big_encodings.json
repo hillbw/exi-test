@@ -1,0 +1,195 @@
+{
+            "name": "XML",
+            "children": [
+                {
+                    "name": "Uncompressed Plaintext",
+                    "children": [
+                        {
+                            "name": ".xml"  
+                        }
+                    ]
+                },
+                {
+                    "name": "Compressed Plaintext",
+                    "children": [
+                        {
+                            "name": ".xml.zip"
+                        },
+                        {
+                            "name": ".xml.gz"
+                        },
+                        {
+                            "name": ".xml.bz2"
+                        }
+                    ]
+                },
+                {
+                    "name": "Without XSD",
+                    "children": [
+                        {
+                            "name": "Uncompressed EXI",
+                            "children": [
+                                {
+                                    "name": ".xml.bitpacked_exi"
+                                },
+                                {
+                                    "name": ".xml.bytealigned_exi"
+                                },
+                                {
+                                    "name": ".xml.precompress_exi"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Compressed EXI",
+                            "children": [
+                                {
+                                    "name": ".xml.compress_exi"
+                                },
+                                {
+                                    "name": ".xml.bitpacked_exi.zip"
+                                },
+                                {
+                                    "name": ".xml.bytealigned_exi.zip"
+                                },
+                                {
+                                    "name": ".xml.precompress_exi.zip"
+                                },
+                                {
+                                    "name": ".xml.bitpacked_exi.gz"
+                                },
+                                {
+                                    "name": ".xml.bytealigned_exi.gz"
+                                },
+                                {
+                                    "name": ".xml.precompress_exi.gz"
+                                },
+                                {
+                                    "name": ".xml.bitpacked_exi.bz2"
+                                },
+                                {
+                                    "name": ".xml.bytealigned_exi.bz2"
+                                },
+                                {
+                                    "name": ".xml.precompress_exi.bz2"
+                                }
+                            ]
+                        }
+
+                    ]
+                },
+                {
+                    "name": "With XSD",
+                    "children": [
+                        {
+                            "name": "Strict",
+                            "children": [
+                                {
+                                    "name": "Uncompressed EXI",
+                                    "children": [
+                                            {
+                                                "name": ".xml.strict_bitpacked_exi"
+                                            },
+                                            {
+                                                "name": ".xml.strict_bytealigned_exi"
+                                            },
+                                            {
+                                                "name": ".xml.strict_precompress_exi"
+                                            }
+                                        ]
+                                },
+                                {
+                                    "name": "Compressed EXI",
+                                    "children": [
+                                        {
+                                            "name": ".xml.strict_compress_exi"
+                                        },
+                                        {
+                                            "name": ".xml.strict_bitpacked_exi.zip"
+                                        },
+                                        {
+                                            "name": ".xml.strict_bytealigned_exi.zip"
+                                        },
+                                        {
+                                            "name": ".xml.strict_precompress_exi.zip"
+                                        },
+                                        {
+                                            "name": ".xml.strict_bitpacked_exi.gz"
+                                        },
+                                        {
+                                            "name": ".xml.strict_bytealigned_exi.gz"
+                                        },
+                                        {
+                                            "name": ".xml.strict_precompress_exi.gz"
+                                        },
+                                        {
+                                            "name": ".xml.strict_bitpacked_exi.bz2"
+                                        },
+                                        {
+                                            "name": ".xml.strict_bytealigned_exi.bz2"
+                                        },
+                                        {
+                                            "name": ".xml.strict_precompress_exi.bz2"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Default",
+                            "children": [
+                            {
+                                "name": "Uncompressed EXI",
+                                "children": [
+                                        {
+                                            "name": ".xml.schema_bitpacked_exi"
+                                        },
+                                        {
+                                            "name": ".xml.schema_bytealigned_exi"
+                                        },
+                                        {
+                                            "name": ".xml.schema_precompress_exi"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Compressed EXI",
+                                    "children": [
+                                        {
+                                            "name": ".xml.schema_compress_exi"
+                                        },
+                                        {
+                                            "name": ".xml.schema_bitpacked_exi.zip"
+                                        },
+                                        {
+                                            "name": ".xml.schema_bytealigned_exi.zip"
+                                        },
+                                        {
+                                            "name": ".xml.schema_precompress_exi.zip"
+                                        },
+                                        {
+                                            "name": ".xml.schema_bitpacked_exi.gz"
+                                        },
+                                        {
+                                            "name": ".xml.schema_bytealigned_exi.gz"
+                                        },
+                                        {
+                                            "name": ".xml.schema_precompress_exi.gz"
+                                        },
+                                        {
+                                            "name": ".xml.schema_bitpacked_exi.bz2"
+                                        },
+                                        {
+                                            "name": ".xml.schema_bytealigned_exi.bz2"
+                                        },
+                                        {
+                                            "name": ".xml.schema_precompress_exi.bz2"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
