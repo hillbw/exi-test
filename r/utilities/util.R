@@ -97,8 +97,8 @@ filesize.vs.compaction <- function(df, baseline, series,  x.range="auto"){
   dfcp <- melt(dfcp[c(series,"base.size")], id.vars="base.size")
   
   # Generate labels for the x and y axes using baseline value
-  ylabel <- paste("Compression (%", baseline, "size)")
-  xlabel <- paste("Original", baseline, "size (bytes)")
+  ylabel <- paste("Compression (% ", toupper(baseline), " size)")
+  xlabel <- paste("Original ", toupper(baseline), " size (bytes)")
   
   # Plot the data and core aesthetics
   p <- ggplot(data = dfcp, aes(x=base.size, y=value, color=variable)) +
@@ -164,6 +164,6 @@ get.range.of.fnames <- function(lower, upper, encoding, df){
 # ------------------------------------------------------------------------------------
 # Export a ggplot in PDF format that fits nicely on US Letter paper with 1.25" margins
 # ------------------------------------------------------------------------------------
-save.for.print <- function(use.case, file.name){
-  ggsave(file=paste0("../plots/", use.case,"-", file.name,".pdf"), width=6, height=3.25, units="in")  
+save.for.print <- function(image.folder, use.case, file.name){
+  ggsave(file=file.path(image.folder, paste0(use.case, "-", file.name, ".pdf")), width=6, height=3.25, units="in")  
 }

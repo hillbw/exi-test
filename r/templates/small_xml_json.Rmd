@@ -1,5 +1,5 @@
 ---
-title: "XML Analysis Template"
+title: "XML/JSON Analysis Template"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   pdf_document: default
@@ -9,12 +9,13 @@ output:
 
 ```{r echo=FALSE}
 # Parameters
-# Use this chunk to set the parameters for a test run.
-use.case.titles <- c("__Digital Forensics XML (DFXML)__",
-                     "__Packet Details Markup Language (PDML)__",
-                     "__OpenStreetMap__")
-use.case <- "dfxml"
-use.case.title <- use.case.titles[1]
+# Use this chunk to set the parameters for a test run. 
+use.case.titles <- c("__Automated Identification System (AIS)__",
+                     "__Global Positioning System XML (GPX)__",
+                     "__OpenWeatherMap__")
+
+use.case <- "owm"
+use.case.title <- use.case.titles[3]
 export.images <- TRUE
 image.folder <- file.path("..","reports","plots")
 ```
@@ -40,6 +41,71 @@ counter <- 1 # controls what letter is assigned to a focus question, as well as 
 ```
 
 # Results for `r use.case.title`  Use Case
+
+### Plaintext Comparisons
+
+`r LETTERS[counter]`. How do JSON and XML compare when plaintext-encoded?
+
+```{r, echo=FALSE}
+s <- c("json")
+p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
+p <- prettify.plot(p, legend.placement="bottom.left")
+print(p)
+
+if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
+counter <- counter + 1
+```
+
+`r LETTERS[counter]`. How do JSON and XML compare when compressed with conventional compression algorithms?
+
+```{r, echo=FALSE}
+s <- c("json.gz",
+       "json.bz2",
+       "xml.gz",
+       "xml.bz2")
+p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
+p <- prettify.plot(p, legend.placement="bottom.left")
+print(p)
+
+if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
+counter <- counter + 1
+```
+
+$\pagebreak$
+
+### JSON-Specific Exploratory
+
+`r LETTERS[counter]`. Which binary encoding of JSON is most compact?
+
+```{r, echo=FALSE}
+s <- c("json.bson",
+       "json.cbor")
+p <- filesize.vs.compaction(df=df, baseline="json", series=s, x.range="log")
+p <- prettify.plot(p, legend.placement="bottom.left")
+print(p)
+
+if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
+counter <- counter + 1
+```
+
+`r LETTERS[counter]`. For binary JSON formats, does post-compression with conventional compression algorithms improve compactness?
+
+```{r, echo=FALSE}
+s <- c("json.bson",
+       "json.bson.gz",
+       "json.bson.bz2",
+       "json.cbor",
+       "json.cbor.gz",
+       "json.cbor.bz2")
+p <- filesize.vs.compaction(df=df, baseline="json", series=s, x.range="log")
+p <- prettify.plot(p, legend.placement="bottom.left")
+print(p)
+
+if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
+counter <- counter + 1
+```
+
+$\pagebreak$
 
 ### EXI Exploratory
 
@@ -88,7 +154,7 @@ if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters
 counter <- counter + 1
 ```
 
-`r LETTERS[counter]`. Do any of the tested compression algorithms perform better on a schemaless, precompress EXI document than the standard DEFLATE?
+`r LETTERS[counter]`. Do any of the tested conventional compression algorithms perform better on a schemaless, precompress EXI document than the standard DEFLATE?
 
 ```{r, echo=FALSE}
 s <- c("xml.precompress_exi.zip",
@@ -104,14 +170,14 @@ counter <- counter + 1
 
 $\pagebreak$
 
-`r LETTERS[counter]`. Do any of the tested compression algorithms perform better on a schema-informed, precompress EXI document than the standard DEFLATE?
+`r LETTERS[counter]`. Do any of the tested conventional compression algorithms perform better on a schema-informed, precompress EXI document than the standard DEFLATE?
 
 ```{r, echo=FALSE}
 s <- c("xml.schema_precompress_exi.zip",
        "xml.schema_precompress_exi.gz",
        "xml.schema_precompress_exi.bz2")
 p <- filesize.vs.compaction(df=df, baseline="xml.schema_compress_exi", series=s, x.range="log")
-p <- prettify.plot(p, legend.placement="bottom.left")
+p <- prettify.plot(p, legend.placement="top.right")
 print(p)
 
 if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
@@ -120,14 +186,17 @@ counter <- counter + 1
 
 ## Binary-comparisons
 
-`r LETTERS[counter]`. Which EXI encoding is the most compact?
+`r LETTERS[counter]`. Which binary format is the most compact?
 
 ```{r, echo=FALSE}
 s <- c("xml.strict_compress_exi",
-            "xml.strict_bitpacked_exi",
-            "xml.compress_exi")
+       "xml.strict_bitpacked_exi",
+       "xml.compress_exi",
+       "json.gz",
+       "json.cbor.gz",
+       "json.bson.gz")
 p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
-p <- prettify.plot(p, legend.placement="bottom.left")
+p <- prettify.plot(p, legend.placement="top.right")
 print(p)
 
 if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
@@ -136,14 +205,17 @@ counter <- counter + 1
 
 $\pagebreak$
 
-`r LETTERS[counter]`. For a network already using gzip, do any of the EXI encodings offer improvements?
+`r LETTERS[counter]`. Do any of the binary formats offer improvement for a network already using gzip?
 
 ```{r, echo=FALSE}
 s <- c("xml.strict_compress_exi",
-            "xml.strict_bitpacked_exi",
-            "xml.compress_exi")
+       "xml.strict_bitpacked_exi",
+       "xml.compress_exi",
+       "json.gz",
+       "json.cbor.gz",
+       "json.bson.gz")
 p <- filesize.vs.compaction(df=df, baseline="xml.gz", series=s, x.range="log")
-p <- prettify.plot(p, legend.placement="top.left")
+p <- prettify.plot(p, legend.placement="bottom.right")
 print(p)
 
 if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
