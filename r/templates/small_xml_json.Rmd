@@ -1,27 +1,23 @@
 ---
 title: "XML/JSON Analysis Template"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   pdf_document: default
   html_document:
     css: css/custom.css
 ---
 
-```{r echo=FALSE}
+```{r cache=FALSE, echo=FALSE}
 # Parameters
 # Use this chunk to set the parameters for a test run. 
 use.case.titles <- c("__Automated Identification System (AIS)__",
                      "__Global Positioning System XML (GPX)__",
                      "__OpenWeatherMap__")
 
-use.case <- "owm"
-use.case.title <- use.case.titles[3]
+use.case <- "ais1"
+use.case.title <- use.case.titles[1]
 export.images <- TRUE
 image.folder <- file.path("..","reports","plots")
-```
 
-
-```{r cache=FALSE, include=FALSE}
 library(knitr)
 library(ggplot2)
 library(reshape2)
@@ -123,7 +119,7 @@ if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters
 counter <- counter + 1
 ```
 
-`r LETTERS[counter]`. How do the primary EXI ‘modes’ compare for schema-informed encodings?
+`r LETTERS[counter]`. How do the primary EXI modes compare for schema-informed encodings?
 
 ```{r, echo=FALSE}
 s <- c("xml.schema_bitpacked_exi",

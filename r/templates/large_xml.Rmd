@@ -7,20 +7,17 @@ output:
     css: css/custom.css
 ---
 
-```{r echo=FALSE}
+```{r cache=FALSE, echo=FALSE}
 # Parameters
 # Use this chunk to set the parameters for a test run.
 use.case.titles <- c("__Digital Forensics XML (DFXML)__",
                      "__Packet Details Markup Language (PDML)__",
                      "__OpenStreetMap__")
-use.case <- "dfxml"
-use.case.title <- use.case.titles[1]
-export.images <- TRUE
+use.case <- "pdml"
+use.case.title <- use.case.titles[2]
+export.images <- FALSE
 image.folder <- file.path("..","reports","plots")
-```
 
-
-```{r cache=FALSE, include=FALSE}
 library(knitr)
 library(ggplot2)
 library(reshape2)
@@ -41,6 +38,37 @@ counter <- 1 # controls what letter is assigned to a focus question, as well as 
 
 # Results for `r use.case.title`  Use Case
 
+```{r echo=FALSE}
+# Extra code for faceting across use-cases.
+
+# df1 <- read.csv(file.path("..", "..", "data", "owm_results.csv"))
+# dfc1 <- dcast(df1, file ~ variable)
+# uc <- character(length(dfc1[,1]))
+# uc[1:length(uc)] <- "OWM"
+# dfc1$use.case <- uc
+# 
+# df2 <- read.csv(file.path("..", "..", "data", "gpx_results.csv"))
+# dfc2 <- dcast(df2, file ~ variable)
+# uc <- character(length(dfc2[,1]))
+# uc[1:length(uc)] <- "GPX"
+# dfc2$use.case <- uc
+# 
+# dfc <- rbind(dfc1, dfc2)
+# 
+# s <- c("xml.bitpacked_exi",
+#        "xml.schema_compress_exi")
+# 
+# df.temp <- melt(dfc, id=c("file", "use.case"))
+# 
+# p <- faceted.filesize.vs.compaction(df=df.temp,
+#                                baseline="xml",
+#                                series=s,
+#                                facet="use.case",
+#                                x.range="auto")
+# p <- prettify.plot(p, legend.placement="top.right")
+# print(p)
+```
+
 ### EXI Exploratory
 
 `r LETTERS[counter]`. How do the primary EXI modes compare for schemaless encodings?
@@ -56,6 +84,8 @@ print(p)
 if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
 counter <- counter + 1
 ```
+
+$\pagebreak$
 
 `r LETTERS[counter]`. How do the primary EXI ‘modes’ compare for schema-informed encodings?
 
@@ -88,6 +118,8 @@ if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters
 counter <- counter + 1
 ```
 
+$\pagebreak$
+
 `r LETTERS[counter]`. Do any of the tested compression algorithms perform better on a schemaless, precompress EXI document than the standard DEFLATE?
 
 ```{r, echo=FALSE}
@@ -117,6 +149,8 @@ print(p)
 if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
 counter <- counter + 1
 ```
+
+$\pagebreak$
 
 ## Binary-comparisons
 
