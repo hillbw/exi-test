@@ -65,6 +65,7 @@ plot.as.percentage <- function(columns, set_ylim=FALSE, range=NULL){
   return(p)
 }
 
+
 # ------------------------------------------------------
 # Plot a dataset as a percentage of a specified encoding
 # ------------------------------------------------------
@@ -85,14 +86,16 @@ plot.as.percentage <- function(columns, set_ylim=FALSE, range=NULL){
 #        - "auto":     The default. Shows full range of dataset on x-axis,
 #                      using a continuous scale.
 #   5) y.range:  Settings for 
-
 filesize.vs.compaction <- function(df, baseline, series,  x.range="auto"){
-
+  
+  print(paste("Series:  ", paste(series, collapse=", ")))
+  print(paste("Baseline: ", baseline))
+  
   # Cast data and evaluate sizes as percentage of specified encoding
   dfc <- dcast(df, file ~ variable)
   dfcp <- data.frame(c(dfc[1], dfc[-1] / dfc[,baseline]))
   dfcp$base.size <- dfc[,baseline]
-  
+  print(summary(dfcp[c(series)]))
   # Melt the data frame back to 'long' form so ggplot2 likes it better.
   dfcp <- melt(dfcp[c(series,"base.size")], id.vars="base.size")
   
@@ -109,7 +112,7 @@ filesize.vs.compaction <- function(df, baseline, series,  x.range="auto"){
            linetype= guide_legend("Encoding"))
   
   # Adjust the y-scale
-  p <- p + scale_y_continuous(ylabel, labels=percent_format())
+  p <- p + scale_y_continuous(ylabel, breaks=seq(0,10,0.1), labels=percent_format())
   p <- p + coord_cartesian(ylim=c(-0.05, max(dfcp$value)*1.05))
   if(max(dfcp$value) > 1){ p <- p + geom_hline(yintercept=1) }
   
@@ -126,12 +129,57 @@ filesize.vs.compaction <- function(df, baseline, series,  x.range="auto"){
 }
 
 
+# ------------------------------------------------------------------------------------------
+# Plot a dataset as a percentage of a specified encoding, and facet across multiple datasets
+# ------------------------------------------------------------------------------------------
+faceted.filesize.vs.compaction <- function(df, baseline, series, facet, x.range="auto"){
+
+# Cast data and evaluate sizes as percentage of specified encoding
+  dfc <- dcast(df, use.case + file ~ variable)
+  dfcp <- data.frame(c(dfc[1:2], dfc[,baseline] / dfc[-(1:2)] ))
+  dfcp$base.size <- dfc[,baseline]
+  
+# Melt the data frame back to 'long' form so ggplot2 likes it better.
+  dfcp <- melt(dfcp[c(series,"base.size", facet)], id.vars=c("base.size",facet))
+  
+  # Generate labels for the x and y axes using baseline value
+  ylabel <- paste("Compression (% ", toupper(baseline), " size)")
+  xlabel <- paste("Original ", toupper(baseline), " size (bytes)")
+  
+  # Plot the data and core aesthetics
+  p <- ggplot(data = dfcp, aes(x=base.size, y=value, color=variable)) +
+    geom_point(size=0.7, shape=3)  +
+    geom_line(size=0.25) + # , aes(linetype=variable)
+    facet_grid(use.case ~ .) +
+    guides(colour = guide_legend("Encoding"),
+           shape = guide_legend("Encoding"),
+           linetype= guide_legend("Encoding"))
+  
+  # Adjust the y-scale
+  p <- p + scale_y_continuous(ylabel, labels=percent_format(), breaks=seq(0,10,.1))
+  p <- p + coord_cartesian(ylim=c(-0.05, max(dfcp$value)*1.05))
+  if(max(dfcp$value) > 1){ p <- p + geom_hline(yintercept=1) }
+  
+  # Adjust the x-scale
+  if(length(x.range) == 2){
+    p <- p + scale_x_continuous(xlabel, labels = comma, limits=range)
+  } else if(x.range == "log") {
+    p <- p + scale_x_log10(xlabel, labels = comma)
+  } else {
+    p <- p + scale_x_continuous(xlabel, labels = comma)
+  }
+  
+  return(p)
+}
 
 
-
+# ----------------------------------------------------------------------
+# Make some changes to the default ggplot2 output to make results better
+# suited for print format.
+# ----------------------------------------------------------------------
 prettify.plot <- function(p, legend.placement="top.right"){
-  # Make it look pretty
-  font.size <- 7
+  
+  font.size <- 8
   p <- p + scale_color_hue(l=50) +
     theme_bw(base_size = font.size) + 
     theme(line=element_line(size = 0.25),
