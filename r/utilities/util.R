@@ -88,14 +88,18 @@ plot.as.percentage <- function(columns, set_ylim=FALSE, range=NULL){
 #   5) y.range:  Settings for 
 filesize.vs.compaction <- function(df, baseline, series,  x.range="auto"){
   
-  print(paste("Series:  ", paste(series, collapse=", ")))
-  print(paste("Baseline: ", baseline))
+
   
   # Cast data and evaluate sizes as percentage of specified encoding
   dfc <- dcast(df, file ~ variable)
   dfcp <- data.frame(c(dfc[1], dfc[-1] / dfc[,baseline]))
   dfcp$base.size <- dfc[,baseline]
+  
+  # Summary data not related to plotting
+  print(paste("Series:  ", paste(series, collapse=", ")))
+  print(paste("Baseline: ", baseline))
   print(summary(dfcp[c(series)]))
+  
   # Melt the data frame back to 'long' form so ggplot2 likes it better.
   dfcp <- melt(dfcp[c(series,"base.size")], id.vars="base.size")
   

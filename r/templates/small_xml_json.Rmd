@@ -9,14 +9,16 @@ output:
 ```{r cache=FALSE, echo=FALSE}
 # Parameters
 # Use this chunk to set the parameters for a test run. 
+selection <- 3
+export.images <- FALSE
+image.folder <- file.path("..","reports","plots")
+
+use.cases <- c("ais1", "gpx", "owm")
 use.case.titles <- c("__Automated Identification System (AIS)__",
                      "__Global Positioning System XML (GPX)__",
                      "__OpenWeatherMap__")
-
-use.case <- "ais1"
-use.case.title <- use.case.titles[1]
-export.images <- TRUE
-image.folder <- file.path("..","reports","plots")
+use.case <- use.cases[selection]
+use.case.title <- use.case.titles[selection]
 
 library(knitr)
 library(ggplot2)
@@ -26,12 +28,12 @@ library(plyr)
 library(grid)
 
 input.file <- file.path("..", "..", "data", paste0(use.case, "_results.csv"))
+df <- read.csv(input.file)
+
 source("../utilities/util.R")
 
 opts_chunk$set(fig.width=8, fig.height=4) # Quick adjustment for landscape figures - only affects knitr output
 options(warn = -1) # Prevent ggplot2 from dumping warnings to knitr output
-
-df <- read.csv(input.file)
 
 counter <- 1 # controls what letter is assigned to a focus question, as well as the letter appended to plot export filenames
 ```
@@ -51,6 +53,8 @@ print(p)
 if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
 counter <- counter + 1
 ```
+
+$\pagebreak$
 
 `r LETTERS[counter]`. How do JSON and XML compare when compressed with conventional compression algorithms?
 
@@ -84,6 +88,8 @@ if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters
 counter <- counter + 1
 ```
 
+$\pagebreak$
+
 `r LETTERS[counter]`. For binary JSON formats, does post-compression with conventional compression algorithms improve compactness?
 
 ```{r, echo=FALSE}
@@ -105,28 +111,15 @@ $\pagebreak$
 
 ### EXI Exploratory
 
-`r LETTERS[counter]`. How do the primary EXI modes compare for schemaless encodings?
+`r LETTERS[counter]`. How do the primary EXI modes compare for schemaless & schema-informed encodings?
 
 ```{r, echo=FALSE}
 s <- c("xml.bitpacked_exi",
-       "xml.precompress_exi",
-       "xml.compress_exi")
-p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
-p <- prettify.plot(p, legend.placement="bottom.left")
-print(p)
-
-if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
-counter <- counter + 1
-```
-
-`r LETTERS[counter]`. How do the primary EXI modes compare for schema-informed encodings?
-
-```{r, echo=FALSE}
-s <- c("xml.schema_bitpacked_exi",
-       "xml.schema_precompress_exi",
+       "xml.schema_bitpacked_exi",
+       "xml.compress_exi",
        "xml.schema_compress_exi")
 p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
-p <- prettify.plot(p, legend.placement="bottom.left")
+p <- prettify.plot(p, legend.placement="top.right")
 print(p)
 
 if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
@@ -149,6 +142,8 @@ print(p)
 if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
 counter <- counter + 1
 ```
+
+$\pagebreak$
 
 `r LETTERS[counter]`. Do any of the tested conventional compression algorithms perform better on a schemaless, precompress EXI document than the standard DEFLATE?
 
@@ -179,6 +174,8 @@ print(p)
 if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
 counter <- counter + 1
 ```
+
+$\pagebreak$
 
 ## Binary-comparisons
 

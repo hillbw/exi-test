@@ -10,13 +10,16 @@ output:
 ```{r cache=FALSE, echo=FALSE}
 # Parameters
 # Use this chunk to set the parameters for a test run.
+selection <- 3
+export.images <- FALSE
+image.folder <- file.path("..","reports","plots")
+
+use.cases <- c("dfxml", "pdml", "osm")
 use.case.titles <- c("__Digital Forensics XML (DFXML)__",
                      "__Packet Details Markup Language (PDML)__",
                      "__OpenStreetMap__")
-use.case <- "pdml"
-use.case.title <- use.case.titles[2]
-export.images <- FALSE
-image.folder <- file.path("..","reports","plots")
+use.case <- use.cases[selection]
+use.case.title <- use.case.titles[selection]
 
 library(knitr)
 library(ggplot2)
@@ -71,27 +74,12 @@ counter <- 1 # controls what letter is assigned to a focus question, as well as 
 
 ### EXI Exploratory
 
-`r LETTERS[counter]`. How do the primary EXI modes compare for schemaless encodings?
+`r LETTERS[counter]`. How do the primary EXI modes compare for schemaless & schema-informed encodings?
 
 ```{r, echo=FALSE}
 s <- c("xml.bitpacked_exi",
-       "xml.precompress_exi",
-       "xml.compress_exi")
-p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
-p <- prettify.plot(p, legend.placement="bottom.left")
-print(p)
-
-if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
-counter <- counter + 1
-```
-
-$\pagebreak$
-
-`r LETTERS[counter]`. How do the primary EXI ‘modes’ compare for schema-informed encodings?
-
-```{r, echo=FALSE}
-s <- c("xml.schema_bitpacked_exi",
-       "xml.schema_precompress_exi",
+       "xml.schema_bitpacked_exi",
+       "xml.compress_exi",
        "xml.schema_compress_exi")
 p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
 p <- prettify.plot(p, legend.placement="bottom.left")
