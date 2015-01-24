@@ -1,5 +1,6 @@
 ---
 title: "XML/JSON Analysis Template"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   pdf_document: default
   html_document:
@@ -11,7 +12,7 @@ output:
 # Use this chunk to set the parameters for a test run. 
 selection <- 3
 export.images <- FALSE
-image.folder <- file.path("..","reports","plots")
+image.folder <- file.path("..","reports","plots","small")
 
 use.cases <- c("ais1", "gpx", "owm")
 use.case.titles <- c("__Automated Identification System (AIS)__",

@@ -85,7 +85,6 @@ plot.as.percentage <- function(columns, set_ylim=FALSE, range=NULL){
 #                      logarithmic scale
 #        - "auto":     The default. Shows full range of dataset on x-axis,
 #                      using a continuous scale.
-#   5) y.range:  Settings for 
 filesize.vs.compaction <- function(df, baseline, series,  x.range="auto"){
   
 
@@ -102,10 +101,10 @@ filesize.vs.compaction <- function(df, baseline, series,  x.range="auto"){
   
   # Melt the data frame back to 'long' form so ggplot2 likes it better.
   dfcp <- melt(dfcp[c(series,"base.size")], id.vars="base.size")
-  
+    
   # Generate labels for the x and y axes using baseline value
-  ylabel <- paste("Compression (% ", toupper(baseline), " size)")
-  xlabel <- paste("Original ", toupper(baseline), " size (bytes)")
+  ylabel <- paste("Compaction (% ", toupper(baseline), " size)")
+  xlabel <- paste("Original ", toupper(baseline), " size (log scale)")
   
   # Plot the data and core aesthetics
   p <- ggplot(data = dfcp, aes(x=base.size, y=value, color=variable)) +
@@ -124,7 +123,12 @@ filesize.vs.compaction <- function(df, baseline, series,  x.range="auto"){
   if(length(x.range) == 2){
     p <- p + scale_x_continuous(xlabel, labels = comma, limits=range)
   } else if(x.range == "log") {
-    p <- p + scale_x_log10(xlabel, labels = comma)
+    
+    # A less-readable format showing breaks as 10^1, 10^2, ... 
+    # p <- p + scale_x_log10(xlabel, breaks=trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x)))
+    p <- p + scale_x_log10(xlabel, 
+                           breaks=c(1,5,10,50,100,500,1000,5000,10000,50000,100000,500000,1000000,5000000,10000000,50000000,100000000,500000000,1000000000,5000000000,10000000000),
+                           labels=c("1B","5B","10B","50B","100B","500B","1KB","5KB","10KB","50KB","100KB","500KB","1MB","5MB","10MB","50MB","100MB","500MB","1GB","5GB","10GB"))
   } else {
     p <- p + scale_x_continuous(xlabel, labels = comma)
   }
@@ -139,22 +143,22 @@ filesize.vs.compaction <- function(df, baseline, series,  x.range="auto"){
 faceted.filesize.vs.compaction <- function(df, baseline, series, facet, x.range="auto"){
 
 # Cast data and evaluate sizes as percentage of specified encoding
-  dfc <- dcast(df, use.case + file ~ variable)
-  dfcp <- data.frame(c(dfc[1:2], dfc[,baseline] / dfc[-(1:2)] ))
+  dfc <- dcast(df, facet + file ~ variable)
+  dfcp <- data.frame(c(dfc[1:2],  dfc[-(1:2)] / dfc[,baseline] ))
   dfcp$base.size <- dfc[,baseline]
   
 # Melt the data frame back to 'long' form so ggplot2 likes it better.
   dfcp <- melt(dfcp[c(series,"base.size", facet)], id.vars=c("base.size",facet))
   
   # Generate labels for the x and y axes using baseline value
-  ylabel <- paste("Compression (% ", toupper(baseline), " size)")
-  xlabel <- paste("Original ", toupper(baseline), " size (bytes)")
+  ylabel <- paste("Compaction (% ", toupper(baseline), " size)")
+  xlabel <- paste("Original ", toupper(baseline), " size (log scale)")
   
   # Plot the data and core aesthetics
   p <- ggplot(data = dfcp, aes(x=base.size, y=value, color=variable)) +
     geom_point(size=0.7, shape=3)  +
     geom_line(size=0.25) + # , aes(linetype=variable)
-    facet_grid(use.case ~ .) +
+    facet_grid(. ~ facet) +
     guides(colour = guide_legend("Encoding"),
            shape = guide_legend("Encoding"),
            linetype= guide_legend("Encoding"))
@@ -168,7 +172,10 @@ faceted.filesize.vs.compaction <- function(df, baseline, series, facet, x.range=
   if(length(x.range) == 2){
     p <- p + scale_x_continuous(xlabel, labels = comma, limits=range)
   } else if(x.range == "log") {
-    p <- p + scale_x_log10(xlabel, labels = comma)
+    # 
+    p <- p + scale_x_log10(xlabel, 
+                           breaks=c(1,10,100,1000,10000,100000,1000000,10000000,100000000,1000000000,10000000000),
+                           labels=c("1B","10B","100B","1KB","10KB","100KB","1MB","10MB","100MB","1GB","10GB"))
   } else {
     p <- p + scale_x_continuous(xlabel, labels = comma)
   }
@@ -183,7 +190,7 @@ faceted.filesize.vs.compaction <- function(df, baseline, series, facet, x.range=
 # ----------------------------------------------------------------------
 prettify.plot <- function(p, legend.placement="top.right"){
   
-  font.size <- 8
+  font.size <- 9
   p <- p + scale_color_hue(l=50) +
     theme_bw(base_size = font.size) + 
     theme(line=element_line(size = 0.25),
@@ -201,6 +208,9 @@ prettify.plot <- function(p, legend.placement="top.right"){
   
   return(p)
 }
+
+
+
 
 # ----------------------------------------------------------------------
 # Get filename list for the N-M smallest elements of a specific encoding

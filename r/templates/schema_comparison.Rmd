@@ -1,0 +1,145 @@
+---
+title: "Schema Comparison Template"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document: default
+  html_document:
+    css: css/custom.css
+---
+
+```{r setup, cache=FALSE, include=FALSE}
+# Parameters
+# Use this chunk to set the parameters for a test run. 
+selection <- 1
+export.images <- TRUE
+image.folder <- file.path("..","reports","plots","schema-quality")
+
+use.cases <- c("ais")
+use.case.titles <- c("__Automated Identification System (AIS)__")
+use.case <- use.cases[selection]
+use.case.title <- use.case.titles[selection]
+
+library(knitr)
+library(ggplot2)
+library(reshape2)
+library(scales)
+library(plyr)
+library(grid)
+
+source("../utilities/util.R")
+
+opts_chunk$set(fig.width=8, fig.height=4) # Quick adjustment for landscape figures - only affects knitr output
+options(warn = -1) # Prevent ggplot2 from dumping warnings to knitr output
+
+counter <- 1 # controls what letter is assigned to a focus question, as well as the letter appended to plot export filenames
+```
+
+# Results for `r use.case.title`  Use Case
+
+`r LETTERS[counter]`. What impact does schema 'quality' have on EXI compression?
+
+```{r echo=FALSE, results='hide'}
+df1 <- read.csv(file.path("..", "..", "data", "ais1_results.csv"))
+dfc1 <- dcast(df1, file ~ variable)
+facet.var <- character(length(dfc1[,1]))
+facet.var[1:length(facet.var)] <- "A ('Best' Schema)"
+dfc1$facet <- facet.var
+
+df2 <- read.csv(file.path("..", "..", "data", "ais2_results.csv"))
+dfc2 <- dcast(df2, file ~ variable)
+facet.var <- character(length(dfc2[,1]))
+facet.var[1:length(facet.var)] <- "B"
+dfc2$facet <- facet.var
+
+df3 <- read.csv(file.path("..", "..", "data", "ais3_results.csv"))
+dfc3 <- dcast(df3, file ~ variable)
+facet.var <- character(length(dfc3[,1]))
+facet.var[1:length(facet.var)] <- "C"
+dfc3$facet <- facet.var
+
+df4 <- read.csv(file.path("..", "..", "data", "ais4_results.csv"))
+dfc4 <- dcast(df4, file ~ variable)
+facet.var <- character(length(dfc4[,1]))
+facet.var[1:length(facet.var)] <- "D ('Worst' Schema)"
+dfc4$facet <- facet.var
+
+dfc <- rbind(dfc1, dfc2, dfc3, dfc4)
+
+s <- c("xml.schema_compress_exi",
+       "xml.schema_bitpacked_exi")
+
+df.temp <- melt(dfc, id=c("file", "facet"))
+
+p <- faceted.filesize.vs.compaction(df=df.temp,
+                               baseline="xml",
+                               series=s,
+                               facet="facet",
+                               x.range="log")
+p <- prettify.plot(p, legend.placement="bottom.right")
+print(p)
+
+if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
+counter <- counter + 1
+```
+
+
+
+
+```{r echo=FALSE, results='hide'}
+# # df1 <- read.csv(file = "/Users/prometheus/Drive/_/Thesis/test/data/ais_results1.csv")
+# df1 <- read.csv(file.path("..", "..", "data", "ais1_results.csv"))
+# dfc1 <- dcast(df1, file ~ variable)
+# dfc1 <- arrange(dfc1, xml)
+# dfcp1 <- data.frame(c(dfc1[1], dfc1[-1] / dfc1$xml))
+# schema <- character(length(dfcp1[,1]))
+# schema[1:length(schema)] <- "A"
+# dfcp1$xsd <- schema
+# dfcp1$base.size <- dfc1$xml
+# 
+# # df2 <- read.csv(file = "/Users/prometheus/Drive/_/Thesis/test/data/ais_results2.csv")
+# df2 <- read.csv(file.path("..", "..", "data", "ais2_results.csv"))
+# dfc2 <- dcast(df2, file ~ variable)
+# dfc2 <- arrange(dfc2, xml)
+# dfcp2 <- data.frame(c(dfc2[1], dfc2[-1] / dfc2$xml))
+# schema[1:length(schema)] <- "B"
+# dfcp2$xsd <- schema
+# dfcp2$base.size <- dfc2$xml
+# 
+# # df3 <- read.csv(file = "/Users/prometheus/Drive/_/Thesis/test/data/ais_results3.csv")
+# df3 <- read.csv(file.path("..", "..", "data", "ais3_results.csv"))
+# dfc3 <- dcast(df3, file ~ variable)
+# dfc3 <- arrange(dfc3, xml)
+# dfcp3 <- data.frame(c(dfc3[1], dfc3[-1] / dfc3$xml))
+# schema[1:length(schema)] <- "C"
+# dfcp3$xsd <- schema
+# dfcp3$base.size <- dfc3$xml
+# 
+# # df4 <- read.csv(file = "/Users/prometheus/Drive/_/Thesis/test/data/ais_results4.csv")
+# df4 <- read.csv(file.path("..", "..", "data", "ais4_results.csv"))
+# dfc4 <- dcast(df4, file ~ variable)
+# dfc4 <- arrange(dfc4, xml)
+# dfcp4 <- data.frame(c(dfc4[1], dfc4[-1] / dfc4$xml))
+# schema[1:length(schema)] <- "D"
+# dfcp4$xsd <- schema
+# dfcp4$base.size <- dfc4$xml
+# 
+# dfcp5 <- rbind(dfcp1, dfcp2, dfcp3, dfcp4)
+# 
+# cols <- c("base.size",
+#           "xsd",
+#           "xml.schema_compress_exi",
+#           "xml.schema_bitpacked_exi")
+# df.temp <- melt(dfcp5[cols], id=c(cols[1], "xsd"))
+#   
+# p <- ggplot(data = df.temp, aes(x=base.size, y=value, color=variable)) +
+#   geom_point(aes(shape=variable)) +
+#   geom_line() +
+#   facet_grid(. ~ xsd) +
+#   scale_y_continuous("% XML size", labels=percent_format()) + 
+#   guides(colour = guide_legend("Encoding"), shape = guide_legend("Encoding")) +
+#   scale_color_hue(l=50) +
+#   coord_cartesian(ylim = c(0, max(df.temp$value))*1.1) +
+#   scale_x_continuous("Original XML size in bytes", labels = comma, limits=c(0,15000))
+# p <- prettify.plot(p, legend.placement="bottom.left")
+# print(p)
+```

@@ -12,7 +12,7 @@ output:
 # Use this chunk to set the parameters for a test run.
 selection <- 3
 export.images <- FALSE
-image.folder <- file.path("..","reports","plots")
+image.folder <- file.path("..","reports","plots","large")
 
 use.cases <- c("dfxml", "pdml", "osm")
 use.case.titles <- c("__Digital Forensics XML (DFXML)__",
@@ -108,7 +108,7 @@ counter <- counter + 1
 
 $\pagebreak$
 
-`r LETTERS[counter]`. Do any of the tested compression algorithms perform better on a schemaless, precompress EXI document than the standard DEFLATE?
+`r LETTERS[counter]`. Do any of the tested conventional compression algorithms perform better on a schemaless, precompress EXI document than the standard DEFLATE?
 
 ```{r, echo=FALSE}
 s <- c("xml.precompress_exi.zip",
@@ -124,7 +124,7 @@ counter <- counter + 1
 
 $\pagebreak$
 
-`r LETTERS[counter]`. Do any of the tested compression algorithms perform better on a schema-informed, precompress EXI document than the standard DEFLATE?
+`r LETTERS[counter]`. Do any of the tested conventional compression algorithms perform better on a schema-informed, precompress EXI document than the standard DEFLATE?
 
 ```{r, echo=FALSE}
 s <- c("xml.schema_precompress_exi.zip",
