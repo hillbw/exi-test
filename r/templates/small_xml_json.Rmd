@@ -75,21 +75,6 @@ $\pagebreak$
 
 ### JSON-Specific Exploratory
 
-`r LETTERS[counter]`. Which binary encoding of JSON is most compact?
-
-```{r, echo=FALSE}
-s <- c("json.bson",
-       "json.cbor")
-p <- filesize.vs.compaction(df=df, baseline="json", series=s, x.range="log")
-p <- prettify.plot(p, legend.placement="bottom.left")
-print(p)
-
-if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
-counter <- counter + 1
-```
-
-$\pagebreak$
-
 `r LETTERS[counter]`. For binary JSON formats, does post-compression with conventional compression algorithms improve compactness?
 
 ```{r, echo=FALSE}
@@ -119,55 +104,6 @@ s <- c("xml.bitpacked_exi",
        "xml.compress_exi",
        "xml.schema_compress_exi")
 p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
-p <- prettify.plot(p, legend.placement="top.right")
-print(p)
-
-if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
-counter <- counter + 1
-```
-
-$\pagebreak$
-
-`r LETTERS[counter]`. Does the ‘strict’ option significantly improve compaction for schema-informed encodings?
-
-```{r, echo=FALSE}
-s <- c("xml.schema_bitpacked_exi",
-       "xml.strict_bitpacked_exi",
-       "xml.schema_compress_exi",
-       "xml.strict_compress_exi")
-p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
-p <- prettify.plot(p, legend.placement="bottom.left")
-print(p)
-
-if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
-counter <- counter + 1
-```
-
-$\pagebreak$
-
-`r LETTERS[counter]`. Do any of the tested conventional compression algorithms perform better on a schemaless, precompress EXI document than the standard DEFLATE?
-
-```{r, echo=FALSE}
-s <- c("xml.precompress_exi.zip",
-       "xml.precompress_exi.gz",
-       "xml.precompress_exi.bz2")
-p <- filesize.vs.compaction(df=df, baseline="xml.compress_exi", series=s, x.range="log")
-p <- prettify.plot(p, legend.placement="bottom.left")
-print(p)
-
-if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
-counter <- counter + 1
-```
-
-$\pagebreak$
-
-`r LETTERS[counter]`. Do any of the tested conventional compression algorithms perform better on a schema-informed, precompress EXI document than the standard DEFLATE?
-
-```{r, echo=FALSE}
-s <- c("xml.schema_precompress_exi.zip",
-       "xml.schema_precompress_exi.gz",
-       "xml.schema_precompress_exi.bz2")
-p <- filesize.vs.compaction(df=df, baseline="xml.schema_compress_exi", series=s, x.range="log")
 p <- prettify.plot(p, legend.placement="top.right")
 print(p)
 
@@ -214,3 +150,66 @@ print(p)
 if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
 counter <- counter + 1
 ```
+
+<!---------------------------------------------------->
+<!-- Unecessary plots. Perhaps move to an appendix. -->
+<!---------------------------------------------------->
+
+<!-- ## Extra Plots
+
+`r LETTERS[counter]`. Which binary encoding of JSON is most compact? 
+
+```{r, echo=FALSE}
+# s <- c("json.bson",
+#        "json.cbor")
+# p <- filesize.vs.compaction(df=df, baseline="json", series=s, x.range="log")
+# p <- prettify.plot(p, legend.placement="bottom.left")
+# print(p)
+# 
+# if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
+# counter <- counter + 1
+```
+
+`r LETTERS[counter]`. Does the ‘strict’ option significantly improve compaction for schema-informed encodings?
+
+```{r, echo=FALSE}
+# s <- c("xml.schema_bitpacked_exi",
+#        "xml.strict_bitpacked_exi",
+#        "xml.schema_compress_exi",
+#        "xml.strict_compress_exi")
+# p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
+# p <- prettify.plot(p, legend.placement="bottom.left")
+# print(p)
+# 
+# if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
+# counter <- counter + 1
+```
+
+`r LETTERS[counter]`. Do any of the tested conventional compression algorithms perform better on a schemaless, precompress EXI document than the standard DEFLATE?
+
+```{r, echo=FALSE}
+# s <- c("xml.precompress_exi.zip",
+#        "xml.precompress_exi.gz",
+#        "xml.precompress_exi.bz2")
+# p <- filesize.vs.compaction(df=df, baseline="xml.compress_exi", series=s, x.range="log")
+# p <- prettify.plot(p, legend.placement="bottom.left")
+# print(p)
+# 
+# if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
+# counter <- counter + 1
+```
+
+`r LETTERS[counter]`. Do any of the tested conventional compression algorithms perform better on a schema-informed, precompress EXI document than the standard DEFLATE?
+
+```{r, echo=FALSE}
+# s <- c("xml.schema_precompress_exi.zip",
+#        "xml.schema_precompress_exi.gz",
+#        "xml.schema_precompress_exi.bz2")
+# p <- filesize.vs.compaction(df=df, baseline="xml.schema_compress_exi", series=s, x.range="log")
+# p <- prettify.plot(p, legend.placement="top.right")
+# print(p)
+# 
+# if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
+# counter <- counter + 1
+```
+-->
