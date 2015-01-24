@@ -38,7 +38,7 @@ counter <- 1 # controls what letter is assigned to a focus question, as well as 
 
 `r LETTERS[counter]`. What impact does schema 'quality' have on EXI compression?
 
-```{r echo=FALSE, results='hide'}
+```{r echo=FALSE}
 df1 <- read.csv(file.path("..", "..", "data", "ais1_results.csv"))
 dfc1 <- dcast(df1, file ~ variable)
 facet.var <- character(length(dfc1[,1]))

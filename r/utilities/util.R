@@ -87,8 +87,6 @@ plot.as.percentage <- function(columns, set_ylim=FALSE, range=NULL){
 #                      using a continuous scale.
 filesize.vs.compaction <- function(df, baseline, series,  x.range="auto"){
   
-
-  
   # Cast data and evaluate sizes as percentage of specified encoding
   dfc <- dcast(df, file ~ variable)
   dfcp <- data.frame(c(dfc[1], dfc[-1] / dfc[,baseline]))
@@ -146,6 +144,11 @@ faceted.filesize.vs.compaction <- function(df, baseline, series, facet, x.range=
   dfc <- dcast(df, facet + file ~ variable)
   dfcp <- data.frame(c(dfc[1:2],  dfc[-(1:2)] / dfc[,baseline] ))
   dfcp$base.size <- dfc[,baseline]
+  
+  # Summary data not related to plotting
+  print(paste("Series:  ", paste(series, collapse=", ")))
+  print(paste("Baseline: ", baseline))
+  print(summary(dfcp[c(series)]))
   
 # Melt the data frame back to 'long' form so ggplot2 likes it better.
   dfcp <- melt(dfcp[c(series,"base.size", facet)], id.vars=c("base.size",facet))
