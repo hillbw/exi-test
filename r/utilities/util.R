@@ -102,7 +102,7 @@ filesize.vs.compaction <- function(df, baseline, series,  x.range="auto"){
     
   # Generate labels for the x and y axes using baseline value
   ylabel <- paste("Compaction (% ", toupper(baseline), " size)")
-  xlabel <- paste("Original ", toupper(baseline), " size (log scale)")
+  xlabel <- paste("Original ", toupper(baseline), " size (bytes, log scale)")
   
   # Plot the data and core aesthetics
   p <- ggplot(data = dfcp, aes(x=base.size, y=value, color=variable)) +
@@ -126,7 +126,7 @@ filesize.vs.compaction <- function(df, baseline, series,  x.range="auto"){
     # p <- p + scale_x_log10(xlabel, breaks=trans_breaks("log10", function(x) 10^x), labels = trans_format("log10", math_format(10^.x)))
     p <- p + scale_x_log10(xlabel, 
                            breaks=c(1,5,10,50,100,500,1000,5000,10000,50000,100000,500000,1000000,5000000,10000000,50000000,100000000,500000000,1000000000,5000000000,10000000000),
-                           labels=c("1B","5B","10B","50B","100B","500B","1KB","5KB","10KB","50KB","100KB","500KB","1MB","5MB","10MB","50MB","100MB","500MB","1GB","5GB","10GB"))
+                           labels=c("1B","5B","10B","50B","100B","500B","1K","5K","10K","50K","100K","500K","1M","5M","10M","50M","100M","500M","1G","5G","10GB"))
   } else {
     p <- p + scale_x_continuous(xlabel, labels = comma)
   }
@@ -155,7 +155,7 @@ faceted.filesize.vs.compaction <- function(df, baseline, series, facet, x.range=
   
   # Generate labels for the x and y axes using baseline value
   ylabel <- paste("Compaction (% ", toupper(baseline), " size)")
-  xlabel <- paste("Original ", toupper(baseline), " size (log scale)")
+  xlabel <- paste("Original ", toupper(baseline), " size (bytes, log scale)")
   
   # Plot the data and core aesthetics
   p <- ggplot(data = dfcp, aes(x=base.size, y=value, color=variable)) +
@@ -178,7 +178,7 @@ faceted.filesize.vs.compaction <- function(df, baseline, series, facet, x.range=
     # 
     p <- p + scale_x_log10(xlabel, 
                            breaks=c(1,10,100,1000,10000,100000,1000000,10000000,100000000,1000000000,10000000000),
-                           labels=c("1B","10B","100B","1KB","10KB","100KB","1MB","10MB","100MB","1GB","10GB"))
+                           labels=c("1B","10B","100B","1K","10K","100K","1M","10M","100M","1G","10G"))
   } else {
     p <- p + scale_x_continuous(xlabel, labels = comma)
   }
@@ -193,22 +193,25 @@ faceted.filesize.vs.compaction <- function(df, baseline, series, facet, x.range=
 # ----------------------------------------------------------------------
 prettify.plot <- function(p, legend.placement="top.right"){
   
-  font.size <- 9
+  font.size <- 8
   p <- p + scale_color_hue(l=50) +
     theme_bw(base_size = font.size) + 
     theme(line=element_line(size = 0.25),
           panel.grid.major = element_line(color = "grey"),
           panel.grid.minor = element_line(size=0.25),
-          legend.key = element_rect(colour = "#ffffff", fill = "#ffffff"),
+          legend.key = element_rect(colour = "#ffffff"),# fill = "#ffffff"),
           legend.background = element_rect(color="grey50", size=0.25),
-          legend.key.size = unit(font.size, "points"))
+          legend.key.size = unit(font.size, "points"),
+          legend.margin = unit(0.5, "points"),
+          legend.title = element_text(lineheight=10))
   
   # Move the legend to a convenient corner
   if(legend.placement == "bottom.right"){ p <- p + theme(legend.justification=c(1,0), legend.position=c(1,0)) }
   if(legend.placement == "bottom.left"){ p <- p + theme(legend.justification=c(0,0), legend.position=c(0,0))  }
   if(legend.placement == "top.right"){ p <- p + theme(legend.justification=c(1,1), legend.position=c(1,1)) }
   if(legend.placement == "top.left"){ p <- p + theme(legend.justification=c(0,1), legend.position=c(0,1)) }
-  
+  if(legend.placement == "mid.right"){ p <- p + theme(legend.justification=c(1,0), legend.position=c(1,0.4)) }
+  if(legend.placement == "mid.left"){ p <- p + theme(legend.justification=c(0,0), legend.position=c(0,0.4)) }
   return(p)
 }
 
@@ -230,5 +233,5 @@ get.range.of.fnames <- function(lower, upper, encoding, df){
 # Export a ggplot in PDF format that fits nicely on US Letter paper with 1.25" margins
 # ------------------------------------------------------------------------------------
 save.for.print <- function(image.folder, use.case, file.name){
-  ggsave(file=file.path(image.folder, paste0(use.case, "-", file.name, ".pdf")), width=6, height=3.25, units="in")  
+  ggsave(file=file.path(image.folder, paste0(file.name, "-", use.case, ".pdf")), width=6, height=3.25, units="in")  
 }
