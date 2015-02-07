@@ -210,7 +210,7 @@ prettify.plot <- function(p, legend.placement="top.right"){
   if(legend.placement == "bottom.left"){ p <- p + theme(legend.justification=c(0,0), legend.position=c(0,0))  }
   if(legend.placement == "top.right"){ p <- p + theme(legend.justification=c(1,1), legend.position=c(1,1)) }
   if(legend.placement == "top.left"){ p <- p + theme(legend.justification=c(0,1), legend.position=c(0,1)) }
-  if(legend.placement == "mid.right"){ p <- p + theme(legend.justification=c(1,0), legend.position=c(1,0.4)) }
+  if(legend.placement == "mid.right"){ p <- p + theme(legend.justification=c(1,0), legend.position=c(1,0.3)) }
   if(legend.placement == "mid.left"){ p <- p + theme(legend.justification=c(0,0), legend.position=c(0,0.4)) }
   return(p)
 }
