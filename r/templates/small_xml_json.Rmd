@@ -11,7 +11,7 @@ output:
 # Parameters
 # Use this chunk to set the parameters for a test run. 
 selection <- 3
-export.images <- FALSE
+export.images <- TRUE
 image.folder <- file.path("..","reports","plots","small")
 
 use.cases <- c("ais1", "gpx", "owm")
@@ -41,26 +41,11 @@ counter <- 1 # controls what letter is assigned to a focus question, as well as 
 
 # Results for `r use.case.title`  Use Case
 
-### Plaintext Comparisons
-
-`r LETTERS[counter]`. How do JSON and XML compare when plaintext-encoded?
+`r LETTERS[counter]`. Is JSON more compact than XML either when both are plaintext encoded or when both are compressed with conventional compression algorithms?
 
 ```{r, echo=FALSE}
-s <- c("json")
-p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
-p <- prettify.plot(p, legend.placement="bottom.left")
-print(p)
-
-if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
-counter <- counter + 1
-```
-
-$\pagebreak$
-
-`r LETTERS[counter]`. How do JSON and XML compare when compressed with conventional compression algorithms?
-
-```{r, echo=FALSE}
-s <- c("json.gz",
+s <- c("json",
+       "json.gz",
        "json.bz2",
        "xml.gz",
        "xml.bz2")
@@ -74,9 +59,7 @@ counter <- counter + 1
 
 $\pagebreak$
 
-### JSON-Specific Exploratory
-
-`r LETTERS[counter]`. For binary JSON formats, does post-compression with conventional compression algorithms improve compactness?
+`r LETTERS[counter]`. Does post-compression with conventional algorithms increase the compactness of BSON or CBOR?
 
 ```{r, echo=FALSE}
 s <- c("json.bson",
@@ -95,9 +78,8 @@ counter <- counter + 1
 
 $\pagebreak$
 
-### EXI Exploratory
 
-`r LETTERS[counter]`. How do the primary EXI modes compare for schemaless & schema-informed encodings?
+`r LETTERS[counter]`. How do the primary EXI modes compare for schemaless and schema-informed encodings?
 
 ```{r, echo=FALSE}
 s <- c("xml.bitpacked_exi",
@@ -114,15 +96,31 @@ counter <- counter + 1
 
 $\pagebreak$
 
-## Binary-comparisons
 
-`r LETTERS[counter]`. Which binary format is the most compact?
+`r LETTERS[counter]`. Is Bitpacked-mode EXI more compact than BSON or CBOR?
 
 ```{r, echo=FALSE}
-s <- c("xml.strict_compress_exi",
+s <- c("xml.bitpacked_exi",
+       "xml.schema_bitpacked_exi",
        "xml.strict_bitpacked_exi",
-       "xml.compress_exi",
-       "json.gz",
+       "json.cbor",
+       "json.bson")
+p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
+p <- prettify.plot(p, legend.placement="mid.right")
+print(p)
+
+if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
+counter <- counter + 1
+```
+
+$\pagebreak$
+
+`r LETTERS[counter]`. Is Compress-mode EXI more compact than BSON or CBOR post-compressed with conventional compression algorithms?
+
+```{r, echo=FALSE}
+s <- c("xml.compress_exi",
+       "xml.schema_compress_exi",
+       "xml.strict_compress_exi",
        "json.cbor.gz",
        "json.bson.gz")
 p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
@@ -135,7 +133,7 @@ counter <- counter + 1
 
 $\pagebreak$
 
-`r LETTERS[counter]`. Do any of the binary formats offer improvement for a network already using gzip?
+`r LETTERS[counter]`. For a network already using Gzip compression, do any of the tested binary encodings offer better compactness?
 
 ```{r, echo=FALSE}
 s <- c("xml.strict_compress_exi",
@@ -207,6 +205,23 @@ counter <- counter + 1
 #        "xml.schema_precompress_exi.gz",
 #        "xml.schema_precompress_exi.bz2")
 # p <- filesize.vs.compaction(df=df, baseline="xml.schema_compress_exi", series=s, x.range="log")
+# p <- prettify.plot(p, legend.placement="top.right")
+# print(p)
+# 
+# if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
+# counter <- counter + 1
+```
+
+`r LETTERS[counter]`. Which of the tested binary formats is the most compact??
+
+```{r, echo=FALSE}
+# s <- c("xml.strict_compress_exi",
+#        "xml.strict_bitpacked_exi",
+#        "xml.compress_exi",
+#        "json.gz",
+#        "json.cbor.gz",
+#        "json.bson.gz")
+# p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
 # p <- prettify.plot(p, legend.placement="top.right")
 # print(p)
 # 

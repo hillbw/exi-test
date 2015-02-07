@@ -11,7 +11,7 @@ output:
 # Parameters
 # Use this chunk to set the parameters for a test run.
 selection <- 3
-export.images <- FALSE
+export.images <- TRUE
 image.folder <- file.path("..","reports","plots","large")
 
 use.cases <- c("dfxml", "pdml", "osm")
@@ -72,8 +72,6 @@ counter <- 1 # controls what letter is assigned to a focus question, as well as 
 # print(p)
 ```
 
-### EXI Exploratory
-
 `r LETTERS[counter]`. How do the primary EXI modes compare for schemaless & schema-informed encodings?
 
 ```{r, echo=FALSE}
@@ -82,7 +80,7 @@ s <- c("xml.bitpacked_exi",
        "xml.compress_exi",
        "xml.schema_compress_exi")
 p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
-p <- prettify.plot(p, legend.placement="bottom.left")
+p <- prettify.plot(p, legend.placement="mid.right")
 print(p)
 
 if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
@@ -108,7 +106,7 @@ counter <- counter + 1
 
 $\pagebreak$
 
-`r LETTERS[counter]`. Do any of the tested conventional compression algorithms perform better on a schemaless, precompress EXI document than the standard DEFLATE?
+`r LETTERS[counter]`. Do any of the tested conventional compression algorithms better compact a schemaless, precompress EXI document than EXI's default DEFLATE?
 
 ```{r, echo=FALSE}
 s <- c("xml.precompress_exi.zip",
@@ -124,7 +122,7 @@ counter <- counter + 1
 
 $\pagebreak$
 
-`r LETTERS[counter]`. Do any of the tested conventional compression algorithms perform better on a schema-informed, precompress EXI document than the standard DEFLATE?
+`r LETTERS[counter]`. Do any of the tested conventional compression algorithms better compact a schema-informed, precompress EXI document than EXI's default DEFLATE?
 
 ```{r, echo=FALSE}
 s <- c("xml.schema_precompress_exi.zip",
@@ -140,16 +138,14 @@ counter <- counter + 1
 
 $\pagebreak$
 
-## Binary-comparisons
-
 `r LETTERS[counter]`. Which EXI encoding is the most compact?
 
 ```{r, echo=FALSE}
 s <- c("xml.strict_compress_exi",
-            "xml.strict_bitpacked_exi",
-            "xml.compress_exi")
+       "xml.strict_bitpacked_exi",
+       "xml.compress_exi")
 p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
-p <- prettify.plot(p, legend.placement="bottom.left")
+p <- prettify.plot(p, legend.placement="mid.right")
 print(p)
 
 if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
@@ -158,14 +154,14 @@ counter <- counter + 1
 
 $\pagebreak$
 
-`r LETTERS[counter]`. For a network already using gzip, do any of the EXI encodings offer improvements?
+`r LETTERS[counter]`. For a network already using gzip compression, do any of the EXI encodings offer better compactness?
 
 ```{r, echo=FALSE}
 s <- c("xml.strict_compress_exi",
             "xml.strict_bitpacked_exi",
             "xml.compress_exi")
 p <- filesize.vs.compaction(df=df, baseline="xml.gz", series=s, x.range="log")
-p <- prettify.plot(p, legend.placement="top.left")
+p <- prettify.plot(p, legend.placement="mid.right")
 print(p)
 
 if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
