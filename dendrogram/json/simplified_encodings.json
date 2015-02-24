@@ -1,0 +1,156 @@
+{
+    "name": "Document",
+    "children": [
+        {
+        	"name": "JSON",
+        	"children": [
+        		{
+        			"name": "Uncompressed Plaintext",
+        			"children": [
+	        			{
+	        				"name": ".json"
+	        			}
+        			]
+        		},
+        		{
+        			"name": "Compressed Plaintext",
+                    "children": [
+                        {
+                            "name": ".json.gz"
+                        }
+                    ]
+        		},
+        		{
+        			"name": "Uncompressed Binary",
+        			"children": [
+        				{
+        					"name": ".json.bson"
+        				},
+                        {
+                            "name": ".json.cbor"
+                        }
+        			]
+        		},
+        		{
+        			"name": "Compressed Binary",
+                    "children": [
+                        {
+                            "name": ".json.bson.gz"
+                        },
+                        {
+                            "name": ".json.cbor.gz"
+                        }
+                    ]
+        		}
+        	]
+        },
+        {
+            "name": "XML",
+            "children": [
+                {
+                    "name": "Uncompressed Plaintext",
+                    "children": [
+                        {
+                            "name": ".xml"  
+                        }
+                    ]
+                },
+                {
+                    "name": "Compressed Plaintext",
+                    "children": [
+                        {
+                            "name": ".xml.gz"
+                        }
+                    ]
+                },
+                {
+                    "name": "Without Schema",
+                    "children": [
+                        {
+                            "name": "Uncompressed EXI",
+                            "children": [
+                                {
+                                    "name": ".xml.bitpacked_exi"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Compressed EXI",
+                            "children": [
+                                {
+                                    "name": ".xml.compress_exi"
+                                },
+                                {
+                                    "name": ".xml.bitpacked_exi.gz"
+                                },
+                                {
+                                    "name": ".xml.precompress_exi.gz"
+                                }
+                            ]
+                        }
+
+                    ]
+                },
+                {
+                    "name": "With Schema",
+                    "children": [
+                        {
+                            "name": "Strict",
+                            "children": [
+                                {
+                                    "name": "Uncompressed EXI",
+                                    "children": [
+                                            {
+                                                "name": ".xml.strict_bitpacked_exi"
+                                            }
+                                        ]
+                                },
+                                {
+                                    "name": "Compressed EXI",
+                                    "children": [
+                                        {
+                                            "name": ".xml.strict_compress_exi"
+                                        },
+                                        {
+                                            "name": ".xml.strict_bitpacked_exi.gz"
+                                        },
+                                        {
+                                            "name": ".xml.strict_precompress_exi.gz"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Default",
+                            "children": [
+                            {
+                                "name": "Uncompressed EXI",
+                                "children": [
+                                        {
+                                            "name": ".xml.schema_bitpacked_exi"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Compressed EXI",
+                                    "children": [
+                                        {
+                                            "name": ".xml.schema_compress_exi"
+                                        },
+                                        {
+                                            "name": ".xml.schema_bitpacked_exi.gz"
+                                        },
+                                        {
+                                            "name": ".xml.schema_precompress_exi.gz"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
