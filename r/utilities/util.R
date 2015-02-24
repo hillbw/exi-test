@@ -102,7 +102,7 @@ filesize.vs.compaction <- function(df, baseline, series,  x.range="auto"){
     
   # Generate labels for the x and y axes using baseline value
   ylabel <- paste("Compaction (% ", toupper(baseline), " size)")
-  xlabel <- paste("Original ", toupper(baseline), " size (bytes, log scale)")
+  xlabel <- paste("Original ", toupper(baseline), " size (bytes, log scale)\n Baseline is ", toupper(baseline), ", i.e. 100% indicates full ", toupper(baseline), " size.")
   
   # Plot the data and core aesthetics
   p <- ggplot(data = dfcp, aes(x=base.size, y=value, color=variable)) +
@@ -115,7 +115,7 @@ filesize.vs.compaction <- function(df, baseline, series,  x.range="auto"){
   # Adjust the y-scale
   p <- p + scale_y_continuous(ylabel, breaks=seq(0,10,0.1), labels=percent_format())
   p <- p + coord_cartesian(ylim=c(-0.05, max(dfcp$value)*1.05))
-  if(max(dfcp$value) > 1){ p <- p + geom_hline(yintercept=1) }
+  if(max(dfcp$value) > 0.95){ p <- p + geom_hline(yintercept=1) }
   
   # Adjust the x-scale
   if(length(x.range) == 2){
@@ -169,7 +169,7 @@ faceted.filesize.vs.compaction <- function(df, baseline, series, facet, x.range=
   # Adjust the y-scale
   p <- p + scale_y_continuous(ylabel, labels=percent_format(), breaks=seq(0,10,.1))
   p <- p + coord_cartesian(ylim=c(-0.05, max(dfcp$value)*1.05))
-  if(max(dfcp$value) > 1){ p <- p + geom_hline(yintercept=1) }
+  if(max(dfcp$value) > 0.95){ p <- p + geom_hline(yintercept=1) }
   
   # Adjust the x-scale
   if(length(x.range) == 2){
