@@ -10,9 +10,9 @@ output:
 ```{r cache=FALSE, echo=FALSE}
 # Parameters
 # Use this chunk to set the parameters for a test run.
-selection <- 3
+selection <- 2
 export.images <- TRUE
-image.folder <- file.path("..","reports","plots","large")
+image.folder <- file.path("..","reports","plots","idfor")
 
 use.cases <- c("dfxml", "pdml", "osm")
 use.case.titles <- c("__Digital Forensics XML (DFXML)__",
@@ -141,9 +141,9 @@ $\pagebreak$
 `r LETTERS[counter]`. Which EXI encoding is the most compact?
 
 ```{r, echo=FALSE}
-s <- c("xml.strict_compress_exi",
-       "xml.strict_bitpacked_exi",
-       "xml.compress_exi")
+s <- c("xml.strict_bitpacked_exi",
+       #"xml.compress_exi",
+       "xml.strict_compress_exi")
 p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
 p <- prettify.plot(p, legend.placement="mid.right")
 print(p)

@@ -1,0 +1,67 @@
+---
+title: "Office Open XML Analysis Template"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document: default
+  html_document:
+    css: css/custom.css
+---
+
+```{r cache=FALSE, echo=FALSE}
+# Parameters
+# Use this chunk to set the parameters for a test run.
+selection <- 3
+export.images <- FALSE
+image.folder <- file.path("..","reports","plots","ooxml")
+
+use.cases <- c("docx", "xlsx", "pptx")
+use.case.titles <- c("__Office Open XML Document__",
+                     "__Office Open XML Spreadsheet__",
+                     "__Office Open XML Presentation__")
+use.case <- use.cases[selection]
+use.case.title <- use.case.titles[selection]
+
+library(knitr)
+library(ggplot2)
+library(reshape2)
+library(scales)
+library(plyr)
+library(grid)
+
+input.file <- file.path("..", "..", "data", paste0(use.case, "_results.csv"))
+source("../utilities/util.R")
+
+opts_chunk$set(fig.width=8, fig.height=4) # Quick adjustment for landscape figures - only affects knitr output
+options(warn = -1) # Prevent ggplot2 from dumping warnings to knitr output
+
+df <- read.csv(input.file)
+
+counter <- 1 # controls what letter is assigned to a focus question, as well as the letter appended to plot export filenames
+```
+
+# Results for `r use.case.title`  Use Case
+
+`r LETTERS[counter]`. Does EXI improve compaction for Microsoft Office documents saved in the Strict Open XML format?
+
+```{r, echo=FALSE}
+if (selection == 1) {
+  s <- c("docx.zip",
+         "doce")
+  p <- filesize.vs.compaction(df=df, baseline="docx", series=s, x.range="log")
+} else if (selection == 2) {
+  s <- c("xlsx.zip",
+         "xlse")
+  p <- filesize.vs.compaction(df=df, baseline="xlsx", series=s, x.range="log")  
+} else if (selection == 3) {
+  s <- c("pptx.zip",
+         "ppte")
+  p <- filesize.vs.compaction(df=df, baseline="pptx", series=s, x.range="log")  
+}
+
+
+p <- prettify.plot(p, legend.placement="bottom.right")
+print(p)
+
+if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
+counter <- counter + 1
+```

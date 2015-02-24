@@ -65,8 +65,10 @@ dfc4$facet <- facet.var
 
 dfc <- rbind(dfc1, dfc2, dfc3, dfc4)
 
-s <- c("xml.schema_compress_exi",
-       "xml.schema_bitpacked_exi")
+s <- c("xml.schema_bitpacked_exi",
+       "xml.strict_bitpacked_exi",
+       "xml.schema_compress_exi",
+       "xml.strict_compress_exi")
 
 df.temp <- melt(dfc, id=c("file", "facet"))
 

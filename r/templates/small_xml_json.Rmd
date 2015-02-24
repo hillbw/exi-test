@@ -12,7 +12,7 @@ output:
 # Use this chunk to set the parameters for a test run. 
 selection <- 3
 export.images <- TRUE
-image.folder <- file.path("..","reports","plots","small")
+image.folder <- file.path("..","reports","plots","idfor")
 
 use.cases <- c("ais1", "gpx", "owm")
 use.case.titles <- c("__Automated Identification System (AIS)__",
@@ -215,17 +215,15 @@ counter <- counter + 1
 `r LETTERS[counter]`. Which of the tested binary formats is the most compact??
 
 ```{r, echo=FALSE}
-# s <- c("xml.strict_compress_exi",
-#        "xml.strict_bitpacked_exi",
-#        "xml.compress_exi",
-#        "json.gz",
-#        "json.cbor.gz",
-#        "json.bson.gz")
-# p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
-# p <- prettify.plot(p, legend.placement="top.right")
-# print(p)
-# 
-# if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
-# counter <- counter + 1
+s <- c("json.bson.gz",
+       "json.cbor.gz",
+       "xml.strict_compress_exi",
+       "xml.strict_bitpacked_exi")
+p <- filesize.vs.compaction(df=df, baseline="xml", series=s, x.range="log")
+p <- prettify.plot(p, legend.placement="top.right")
+print(p)
+
+if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
+counter <- counter + 1
 ```
 -->
