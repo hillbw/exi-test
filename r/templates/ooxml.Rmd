@@ -11,7 +11,7 @@ output:
 # Parameters
 # Use this chunk to set the parameters for a test run.
 selection <- 3
-export.images <- FALSE
+export.images <- TRUE
 image.folder <- file.path("..","reports","plots","ooxml")
 
 use.cases <- c("docx", "xlsx", "pptx")
@@ -65,3 +65,44 @@ print(p)
 if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
 counter <- counter + 1
 ```
+
+```{r}
+
+df1 <- read.csv(file.path("..", "..", "data", "docx_results.csv"))
+dfc1 <- dcast(df1, file ~ variable)
+dfc1 <- rename(dfc1, c("docx"="office", "doce"="exi", "docx.zip"="office.zip"))
+facet.var <- character(length(dfc1[,1]))
+facet.var[1:length(facet.var)] <- "Word"
+dfc1$facet <- facet.var
+
+df2 <- read.csv(file.path("..", "..", "data", "xlsx_results.csv"))
+dfc2 <- dcast(df2, file ~ variable)
+dfc2 <- rename(dfc2, c("xlsx"="office", "xlse"="exi", "xlsx.zip"="office.zip"))
+facet.var <- character(length(dfc2[,1]))
+facet.var[1:length(facet.var)] <- "Excel"
+dfc2$facet <- facet.var
+
+df3 <- read.csv(file.path("..", "..", "data", "pptx_results.csv"))
+dfc3 <- dcast(df3, file ~ variable)
+dfc3 <- rename(dfc3, c("pptx"="office", "ppte"="exi", "pptx.zip"="office.zip"))
+facet.var <- character(length(dfc3[,1]))
+facet.var[1:length(facet.var)] <- "PowerPoint"
+dfc3$facet <- facet.var
+
+dfc <- rbind(dfc1, dfc2, dfc3)
+
+s <- c("exi")
+
+df.temp <- melt(dfc, id=c("file", "facet"))
+
+p <- faceted.filesize.vs.compaction(df=df.temp,
+                               baseline="office",
+                               series=s,
+                               facet="facet",
+                               x.range="log")
+p <- prettify.plot(p, legend.placement="bottom.right")
+print(p)
+
+if(export.images){ save.for.print(image.folder, use.case, paste0("plot-",letters[counter])) }
+counter <- counter + 1
+counter <- counter + 1
