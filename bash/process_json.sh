@@ -1,16 +1,20 @@
 #!/bin/sh
 
-#  --------------------
-#  Parameters and Setup
-#  --------------------
+# ------------------------------------------------
+# Perform a variety of encodings for a single JSON
+# file and write the resulting file sizes to a CSV
+# file.
+# ------------------------------------------------
+
+    #  --------------------
+    #  Parameters and Setup
+    #  --------------------
     CLEANUP=1 # Set 1 to remove any files created, 0 to leave them.
 
-    dir=$1     # 1st parameter: directory path, including final '/'
-    name=$2    # 2nd parameter: file name w/o extension
-    ext=$3     # 3rd parameter: file extension, including '.'
-    output=$4  # 4th parameter: output filename
-
-    sumerogi='java -jar ../java/sumerogi/sumerogi.jar' # Sumerogi is currently encode-only
+    dir=$1    # 1st parameter: directory path, including final '/'
+    name=$2   # 2nd parameter: file name w/o extension
+    ext=$3    # 3rd parameter: file extension, including '.'
+    output=$4 # 4th parameter: output filename
 
 
 #  ----------------------
@@ -86,19 +90,6 @@
     if [ $CLEANUP -eq 1 ]
         then
             rm ${dir}*.cbor
-    fi
-
-
-    #  -----
-    #  .eson
-    #  -----
-    ${sumerogi} ${dir}${name}${ext} ${dir}${name}.eson
-    eval $(stat -s ${dir}${name}.eson)
-    echo "${name},json.eson,$st_size" >> ${output}
-
-    if [ $CLEANUP -eq 1 ]
-        then
-            rm ${dir}*.eson
     fi
 
 
@@ -189,47 +180,4 @@
         then
             rm ${dir}*.zip
             rm ${dir}*.cbor
-    fi
-
-
-    #  --------
-    #  .eson.gz
-    #  --------
-    ${sumerogi} ${dir}${name}${ext} ${dir}${name}.eson
-    gzip ${dir}${name}.eson
-    eval $(stat -s ${dir}${name}.eson.gz)
-    echo "${name},json.eson.gz,$st_size" >> ${output}
-
-    if [ $CLEANUP -eq 1 ]
-        then
-            rm ${dir}*.gz
-    fi
-
-
-    #  ---------
-    #  .eson.bz2
-    #  ---------
-    ${sumerogi} ${dir}${name}${ext} ${dir}${name}.eson
-    bzip2 ${dir}${name}.eson
-    eval $(stat -s ${dir}${name}.eson.bz2)
-    echo "${name},json.eson.bz2,$st_size" >> ${output}
-
-    if [ $CLEANUP -eq 1 ]
-        then
-            rm ${dir}*.bz2
-    fi
-
-
-    #  ---------
-    #  .eson.zip
-    #  ---------
-    ${sumerogi} ${dir}${name}${ext} ${dir}${name}.eson
-    zip -j ${dir}${name}.eson.zip ${dir}${name}.eson
-    eval $(stat -s ${dir}${name}.eson.zip)
-    echo "${name},json.eson.zip,$st_size" >> ${output}
-
-    if [ $CLEANUP -eq 1 ]
-        then
-            rm ${dir}*.zip
-            rm ${dir}*.eson
     fi
